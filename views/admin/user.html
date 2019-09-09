@@ -1,0 +1,62 @@
+{{define "admin/user.html"}}
+    <!DOCTYPE html>
+    <html lang="en">
+    <head>
+        <meta charset="UTF-8">
+
+        <title>管理后台</title>
+        <link rel="stylesheet" href="/static/css/uikit.min.css" />
+    </head>
+    <body>
+    {{template "admin/tab.html"}}
+    <div class="uk-section">
+        <div class="uk-container">
+            <ul class="uk-tab">
+                <li><a href="/admin/users">List</a></li>
+                <li class="{{if not .user.ID }} uk-active {{else}} '' {{end}}"><a href="{{if .user.ID }}/admin/user/new{{else}} 'javascript:void(0)' {{end}}">Create</a></li>
+                {{if .user.ID }}
+                <li class="{{if .user.ID }} uk-active {{else}} '' {{end}}"><a href="javascript:void(0)">Edit</a></li>
+                {{end}}
+            </ul>
+
+            <form class="uk-form-horizontal uk-margin-large user-form" action="{{ if .user }}/admin/edit_user/{{.user.ID}} {{else}} /admin/user/new{{end}}" method="POST" name="user_form">
+                <fieldset class="uk-fieldset">
+                    <div class="uk-margin">
+                        <label class="uk-form-label" for="">UserName</label>
+                        <div class="uk-form-controls">
+                            <input name="username" class="uk-input uk-form-width-medium " type="text" value="{{if .user }} {{.user.Name}}{{end}}">
+                        </div>
+                    </div>
+                    <div class="uk-margin">
+                        <label class="uk-form-label" for="">Email</label>
+                        <div class="uk-form-controls">
+                            <input name="email" class="uk-input uk-form-width-medium " type="email" value="{{if .user }}{{.user.Email}}{{end}}">
+                        </div>
+                    </div>
+                    <div class="uk-margin">
+                        <label class="uk-form-label" for="">PassWord</label>
+                        <div class="uk-form-controls">
+                            <input name="password" class="uk-input uk-form-width-medium " type="password">
+                        </div>
+                    </div>
+                    <div class="uk-margin">
+                        <label class="uk-form-label" for="">Active</label>
+                        <div class="uk-form-controls">
+                            <input class="uk-checkbox" type="checkbox" name="active" checked>
+                        </div>
+                    </div>
+                    <button class="uk-button uk-button-primary uk-button-small">SUBMIT</button>
+
+                </fieldset>
+            </form>
+        </div>
+    </div>
+
+    {{template "admin/page_end.html"}}
+    <script src="https://cdn.bootcss.com/jquery/3.4.1/jquery.js"></script>
+    <script src="/static/dist/base.js"></script>
+    <script src="/static/dist/admin.js"></script>
+    <script src="//cdn.bootcss.com/uikit/2.25.0/js/uikit.js"></script>
+    </body>
+    </html>
+{{end}}

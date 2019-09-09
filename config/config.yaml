@@ -1,0 +1,8 @@
+runmode: debug
+general:
+  addr: :9090
+  dsn: root:123456@(10.211.55.6:3306)/lyanna?charset=utf8&parseTime=True
+  SessionSecret: lyanna_blog
+  LogOutEnabled: true
+
+

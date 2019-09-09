@@ -1,0 +1,98 @@
+{{define "admin/post.html"}}
+    <!DOCTYPE html>
+    <html lang="en">
+    <head>
+        <meta charset="UTF-8">
+
+        <title>管理后台</title>
+        <link rel="stylesheet" href="/static/css/uikit.min.css" />
+    </head>
+    <body>
+    {{template "admin/tab.html"}}
+    <div class="uk-section">
+        <div class="uk-container">
+            <ul class="uk-tab">
+                <li><a href="/admin/posts">List</a></li>
+                <li class="{{if not .post.ID }} uk-active {{else}} '' {{end}}"><a href="{{if .post.ID }}/admin/post/new{{else}} 'javascript:void(0)' {{end}}">Create</a></li>
+                {{if .post.ID }}
+                    <li class="{{if .post.ID }} uk-active {{else}} '' {{end}}"><a href="javascript:void(0)">Edit</a></li>
+                {{end}}
+            </ul>
+
+            <form class="uk-form-horizontal uk-margin-large user-form" action="{{ if .post }}/admin/post/edit/{{.post.ID}} {{else}} /admin/user/new{{end}}" method="POST" name="post_form">
+                <fieldset class="uk-fieldset">
+                    <div class="uk-margin">
+                        <label class="uk-form-label" for="">Title</label>
+                        <div class="uk-form-controls">
+                            <input name="title" class="uk-input uk-form-width-large " type="text" value="{{if .post }} {{.post.Title}}{{end}}">
+                        </div>
+                    </div>
+                    <div class="uk-margin">
+                        <label class="uk-form-label" for="">Slug</label>
+                        <div class="uk-form-controls">
+                            <input name="slug" class="uk-input uk-form-width-large " type="text" value="{{if .post }}{{.post.Slug}}{{end}}">
+                        </div>
+                    </div>
+                    <div class="uk-margin">
+                        <label class="uk-form-label" for="">Summary</label>
+                        <div class="uk-form-controls">
+                            <input name="summary" class="uk-input uk-form-width-large " type="text" value="{{if .post }}{{.post.Summary}}{{end}}">
+                        </div>
+                    </div>
+                    {{$p := .post}}
+                    {{$pt := .postTags}}
+                    <div class="uk-margin">
+                        <label class="uk-form-label" for="">Tag</label>
+                        <div class="uk-form-controls">
+                            <select name="tags" multiple="multiple">
+                                {{ range $i,$j := .allTags }}
+                                    <option value="{{$j.Name}}" {{if $p.IsInAllTags $j.Name $pt }}selected="selected"{{end}}>{{$j.Name}}</option>
+                                {{end}}
+                            </select>
+                        </div>.
+                    </div>
+                    {{$AID := .post.AuthorID}}
+                    <div class="uk-margin">
+                        <label class="uk-form-label" for="">Author</label>
+                        <div class="uk-form-controls">
+                            <select name="author">
+
+                                {{ range $k,$v := .users }}
+                                <option value="{{$v.ID}}"
+                                        {{if eq $AID $v.ID }}
+                                        selected="selected"
+                                        {{end}}
+                                >{{$v.Name}}
+                                </option>
+                               {{end}}
+                            </select>
+                        </div>
+                    </div>
+                    <div class="uk-margin">
+                        <label class="uk-form-label" for="">CanComment</label>
+                        <div class="uk-form-controls">
+                            <input class="uk-checkbox" type="checkbox" name="can_comment" checked>
+                        </div>
+                    </div>
+                    <div class="uk-margin">
+                        <label class="uk-form-label" for="">Publish</label>
+                        <div class="uk-form-controls">
+                            <input class="uk-checkbox" type="checkbox" name="publish" checked>
+                        </div>
+                    </div>
+                    <button class="uk-button uk-button-primary uk-button-small">SUBMIT</button>
+
+                </fieldset>
+            </form>
+        </div>
+    </div>
+
+    {{template "admin/page_end.html"}}
+    <script src="https://cdn.bootcss.com/jquery/3.4.1/jquery.js"></script>
+    <script src="/static/dist/base.js"></script>
+    <script src="/static/dist/admin.js"></script>
+    <script src="/static/dist/post.js"></script>
+    <script src="//cdn.bootcss.com/uikit/2.25.0/js/uikit.js"></script>
+    </body>
+    </html>
+{{end}}

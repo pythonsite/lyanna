@@ -1,0 +1,71 @@
+{{define "admin/list_user.html"}}
+    <!DOCTYPE html>
+    <html lang="en">
+    <head>
+        <meta charset="UTF-8">
+
+        <title>管理后台</title>
+        <link rel="stylesheet" href="/static/css/uikit.min.css" />
+    </head>
+    <body>
+    {{template "admin/tab.html"}}
+    <div class="uk-section">
+        <div class="uk-container">
+            {{ if .msg }}
+                <div class="uk-alert-success" uk-alert>
+                    <a class="uk-alert-close" uk-close></a>
+                    <p>{{.msg}}</p>
+                </div>
+            {{end}}
+
+
+            <ul class="uk-tab">
+                <li class="uk-active"><a href="/admin/users">List({{.user_count}})</a></li>
+                <li><a href="/admin/user/new">Create</a></li>
+            </ul>
+            <table class="uk-table uk-table-hover uk-table-divider">
+                <thead>
+                <tr>
+                    <th></th>
+                    <th>Username</th>
+                    <th>Email</th>
+                    <th>Active</th>
+                    <th><strong>Profile</strong></th>
+                </tr>
+                </thead>
+                <tbody>
+                {{ range .users }}
+                <tr>
+                    <td>
+                        <a href="/admin/edit/{{.ID}}">
+                            <span uk-icon="file-edit"></span>
+                        </a>
+                        <a data-id="{{.ID}}">
+                            <span uk-icon="trash"></span>
+                        </a>
+                    </td>
+                    <td>{{ .Name}}</td>
+                    <td>{{ .Email }}</td>
+                    <td>
+                        {{if .Active}}
+                        Active
+                        {{else}}
+                        Deactivated
+                        {{end}}
+                    </td>
+                    <td></td>
+                </tr>
+                {{end}}
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    {{template "admin/page_end.html"}}
+    <script src="https://cdn.bootcss.com/jquery/3.4.1/jquery.js"></script>
+    <script src="/static/dist/base.js"></script>
+    <script src="/static/dist/admin.js"></script>
+    <script src="//cdn.bootcss.com/uikit/2.25.0/js/uikit.js"></script>
+    </body>
+    </html>
+{{end}}

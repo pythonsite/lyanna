@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>${ title }</title>
+    ${ self.doc_head() }
+</head>
+<body>
+
+<div class="uk-container">
+    <div class="uk-card uk-card-body uk-card-primary">
+        <h3 class="uk-card-title">Example headline</h3>
+
+        <button class="uk-button uk-button-default" uk-tooltip="title: Hello World">Hover</button>
+    </div>
+</div>
+
+${ self.bottom_script() }
+</body>
+</html>
+
+<%def name="title()">豆瓣</%def>
+<%def name="more_header()"></%def>
+
+<%def name="doc_head()">
+<link rel="stylesheet" href="/static/css/uikit.min.css" />
+${self.more_header() | n}
+</%def>
+
+<%def name="bottom_script()">
+</%def>

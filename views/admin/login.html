@@ -1,0 +1,40 @@
+{{ define "admin/login.html" }}
+    <!DOCTYPE html>
+    <html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="error" content="{{.msg}}">
+        <title>管理后台</title>
+        <link rel="stylesheet" href="/static/css/uikit.min.css" />
+    </head>
+    <body>
+        <div class="text-center">
+            <form class="uk-form-horizontal uk-margin-large login-form" action="/admin/login" method="POST" name="login_user_form">
+                <fieldset class="uk-fieldset">
+                    <legend class="uk-legend">Login</legend>
+                    <div class="uk-margin">
+                        <label class="uk-form-label" for="">用户名</label>
+                        <div class="uk-form-controls">
+                            <input name="username" class="uk-input uk-form-width-medium " type="text">
+                        </div>
+                    </div>
+                    <div class="uk-margin">
+                        <label class="uk-form-label" for="">密码</label>
+                        <div class="uk-form-controls">
+                            <input name="password" class="uk-input uk-form-width-medium " type="password">
+                        </div>
+                    </div>
+                    <button class="uk-button uk-button-primary uk-button-small">登录</button>
+                </fieldset>
+            </form>
+        </div>
+        {{ template "admin/page_end.html"}}
+        <script src="https://cdn.bootcss.com/jquery/3.4.1/jquery.js"></script>
+        <script src="/static/dist/base.js"></script>
+        <script src="/static/dist/admin.js"></script>
+        <script src="//cdn.bootcss.com/uikit/2.25.0/js/uikit.js"></script>
+
+    </body>
+    </html>
+
+{{end}}

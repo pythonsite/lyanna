@@ -3,7 +3,7 @@
     <html lang="en">
     <head>
         <meta charset="UTF-8">
-
+        {{if .post}}<meta name="raw_content" content="{{.content}}">{{end}}
         <title>管理后台</title>
         <link rel="stylesheet" href="/static/css/uikit.min.css" />
     </head>
@@ -39,7 +39,12 @@
                             <input name="summary" class="uk-input uk-form-width-large " type="text" value="{{if .post }}{{.post.Summary}}{{end}}">
                         </div>
                     </div>
-                    <textarea id="content"></textarea>
+                    <div class="uk-margin">
+                        <label class="uk-form-label" for="">Content</label>
+                        <div class="uk-form-controls">
+                            <textarea name="content" class="uk-textarea">{{if .post }}{{.Content}}{{end}}</textarea>
+                        </div>
+                    </div>
                     {{$p := .post}}
                     {{$pt := .postTags}}
                     <div class="uk-margin">

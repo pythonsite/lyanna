@@ -38,11 +38,13 @@ func GetEditPost(c *gin.Context) {
 	if post == nil {
 		c.Redirect(http.StatusMovedPermanently,"/admin/users")
 	}
+	content := models.GetContent(int(postID))
 	c.HTML(http.StatusOK, "admin/post.html",gin.H{
 		"post":post,
 		"users":users,
 		"allTags":allTags,
 		"postTags":postTags,
+		"content": content,
 	})
 }
 
@@ -59,6 +61,7 @@ func PostCreatePost(c *gin.Context) {
 	author := c.PostForm("author")
 	authorID,_ := strconv.ParseInt(author,10,64)
 	tags := c.PostFormArray("tags")
+	content := c.PostForm("content")
 	fmt.Println("-----")
 	fmt.Println(tags)
 	canComment := "on" == c.PostForm("can_comment")
@@ -73,11 +76,10 @@ func PostCreatePost(c *gin.Context) {
 	}
 	post.ID = uint64(pID)
 	post.Update()
+	models.SetContent(int(pID), content)
 	originPostTags,_ := models.ListTagByPostID(post.ID)
 	originPostTagNames := models.GetTagNames(originPostTags)
 	models.UpdateMultiTags(originPostTagNames, tags, int(post.ID))
-	//newTags, _ :=  models.ListTagByPostID(post.ID)
-	//post.Tags = newTags
 	posts, _ := models.ListPosts()
 	for _, post := range posts {
 		tags, _:= models.ListTagByPostID(post.ID)

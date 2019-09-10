@@ -29,6 +29,10 @@ $switcher.on('click', (event)  => {
 
 let simplemde = new SimpleMDE({ element: $("#content")[0] });
 
+let $content = $('meta[name=raw_content]').attr('content');
+if ($content) {
+    simplemde.value($content);
+}
 
 $(document).ready(() => {
     $("select").select2({

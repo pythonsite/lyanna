@@ -50,6 +50,8 @@ func InitDB()(err error) {
 	return
 }
 
+//redis存文章的内容格式例子：posts/1/props/content
+
 func initRedis(server, password string)*redis.Pool {
 	return &redis.Pool{
 		MaxIdle:64,

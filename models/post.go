@@ -1,5 +1,7 @@
 package models
 
+var RedisPostKey string = "posts/%d/props/content"
+
 type Post struct {
 	BaseModel
 	User User `gorm:"-"`

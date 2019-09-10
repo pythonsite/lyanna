@@ -1,6 +1,7 @@
 package models
 
 import (
+	"fmt"
 	"github.com/garyburd/redigo/redis"
 	_ "github.com/go-sql-driver/mysql"
 	"github.com/jinzhu/gorm"
@@ -86,6 +87,7 @@ func init() {
 	log.Println(Conf)
 	err = InitDB()
 	checkError(err)
-	log.Println(Conf.General.RedisUrl)
+	RedisPool = initRedis(Conf.General.RedisUrl,"")
+	fmt.Println(RedisPool)
 
 }

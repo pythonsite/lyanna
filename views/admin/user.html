@@ -19,12 +19,12 @@
                 {{end}}
             </ul>
 
-            <form class="uk-form-horizontal uk-margin-large user-form" action="{{ if .user }}/admin/edit_user/{{.user.ID}} {{else}} /admin/user/new{{end}}" method="POST" name="user_form">
+            <form class="uk-form-horizontal uk-margin-large user-form" action="{{ if .user }}/admin/edit/{{.user.ID}} {{else}} /admin/user/new{{end}}" method="POST" name="user_form">
                 <fieldset class="uk-fieldset">
                     <div class="uk-margin">
                         <label class="uk-form-label" for="">UserName</label>
                         <div class="uk-form-controls">
-                            <input name="username" class="uk-input uk-form-width-medium " type="text" value="{{if .user }} {{.user.Name}}{{end}}">
+                            <input name="username" class="uk-input uk-form-width-medium " type="text" value="{{if .user }}{{.user.Name}}{{end}}">
                         </div>
                     </div>
                     <div class="uk-margin">

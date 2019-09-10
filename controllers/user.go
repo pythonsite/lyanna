@@ -54,7 +54,7 @@ func UserList(c *gin.Context) {
 }
 
 func PostUserEdit(c *gin.Context) {
-	users, _ := models.ListUsers()
+
 	id := c.Param("id")
 	uID, err := strconv.ParseUint(id,10,64)
 	if err != nil {
@@ -79,6 +79,7 @@ func PostUserEdit(c *gin.Context) {
 			"msg": err.Error(),
 		})
 	}
+	users, _ := models.ListUsers()
 	c.HTML(http.StatusOK,"admin/list_user.html",gin.H{
 		"users":users,
 		"user":user,

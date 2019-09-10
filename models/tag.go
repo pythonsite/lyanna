@@ -10,3 +10,15 @@ func ListALlTags()([]*Tag, error) {
 	err := DB.Find(&tags).Error
 	return tags,err
 }
+
+func GetTagIDByName(name string) int {
+	var tag Tag
+	DB.First(&tag,"name=?",name)
+	return int(tag.ID)
+}
+
+func GetTag(tag *Tag){
+	res := DB.FirstOrCreate(tag,"name=?",tag.Name).Row()
+	_ = res.Scan(tag)
+
+}

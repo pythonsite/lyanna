@@ -40,7 +40,7 @@ func UserLogin(c *gin.Context) {
 	s.Clear()
 	s.Set(models.SESSION_KEY,user.ID)
 	s.Save()
-	c.Redirect(http.StatusMovedPermanently,"/admin/index")
+	c.Redirect(http.StatusMovedPermanently,"/admin")
 }
 
 func UserList(c *gin.Context) {

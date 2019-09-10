@@ -24,7 +24,7 @@
                     <div class="uk-margin">
                         <label class="uk-form-label" for="">Title</label>
                         <div class="uk-form-controls">
-                            <input name="title" class="uk-input uk-form-width-large " type="text" value="{{if .post }} {{.post.Title}}{{end}}">
+                            <input name="title" class="uk-input uk-form-width-large " type="text" value="{{if .post }}{{.post.Title}}{{end}}">
                         </div>
                     </div>
                     <div class="uk-margin">
@@ -44,11 +44,13 @@
                     <div class="uk-margin">
                         <label class="uk-form-label" for="">Tag</label>
                         <div class="uk-form-controls">
+
                             <select name="tags" multiple="multiple">
                                 {{ range $i,$j := .allTags }}
-                                    <option value="{{$j.Name}}" {{if $p.IsInAllTags $j.Name $pt }}selected="selected"{{end}}>{{$j.Name}}</option>
+                                <option value="{{$j.Name}}" {{if $p.IsInAllTags $j.Name $pt }}selected="selected"{{end}}>{{$j.Name}}</option>
                                 {{end}}
                             </select>
+
                         </div>.
                     </div>
                     {{$AID := .post.AuthorID}}

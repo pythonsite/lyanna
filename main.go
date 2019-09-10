@@ -4,6 +4,7 @@ import (
 	"github.com/gin-contrib/sessions"
 	"github.com/gin-contrib/sessions/cookie"
 	"github.com/gin-gonic/gin"
+	"html/template"
 	"log"
 	"lyanna/controllers"
 	"lyanna/models"
@@ -11,7 +12,6 @@ import (
 	"os"
 	"path/filepath"
 	"strings"
-	"html/template"
 )
 
 func main() {

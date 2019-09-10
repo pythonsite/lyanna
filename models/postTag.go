@@ -1,5 +1,9 @@
 package models
 
+import (
+	"fmt"
+	"log"
+)
 
 type PostTag struct {
 	BaseModel
@@ -34,6 +38,64 @@ func ListTagByPostID (id interface{}) ([]*Tag,error) {
 	return tags, nil
 }
 
+func GetTagNames (tags []*Tag) []string {
+	var tagNames []string
+	for _,v :=range tags {
+		tagNames = append(tagNames,v.Name)
+	}
+	return tagNames
+}
+
 func DeleteTagByPostID(postID interface{}) error {
 	return DB.Delete(&PostTag{},"post_id=?",postID).Error
+}
+
+func UpdateMultiTags(originTags []string, newTags []string, postID int) {
+	needToDelTags := GetTagArray(originTags, newTags)
+	var needToDelTagID []int
+	for _,v := range needToDelTags {
+		tagID := GetTagIDByName(v)
+		needToDelTagID = append(needToDelTagID, tagID)
+	}
+	DB.Delete(&PostTag{},"tag_id in ( ? )",needToDelTagID)
+
+	needToAddTags := GetTagArray(newTags, originTags)
+	fmt.Println(needToAddTags)
+	var needAddTagID []int
+	for _,v := range needToAddTags {
+		tag := Tag{
+			Name:v,
+		}
+		GetTag(&tag)
+		needAddTagID = append(needAddTagID,int(tag.ID))
+		log.Println(needToDelTagID)
+	}
+	for _,v := range needAddTagID {
+		InsertPostTag(int64(postID),int64(v))
+	}
+
+
+
+
+}
+
+// 判断tag是否在array中
+func IsInArray(name string, tagNameArray []string) bool {
+	for _, v:= range tagNameArray {
+		if name == v {
+			return  true
+		}
+	}
+	return false
+}
+
+// 获取需要删除的tags以及需要新增加的tags
+func GetTagArray(originTags []string, newTags []string) []string {
+	var tags []string
+	for _,v1 := range originTags {
+		if !IsInArray(v1,newTags) {
+			tags = append(tags, v1)
+		}
+	}
+	return tags
 }

@@ -1,6 +1,5 @@
 package controllers
 
-import "C"
 import (
 	"fmt"
 	"github.com/gin-gonic/gin"
@@ -59,8 +58,9 @@ func PostCreatePost(c *gin.Context) {
 	summary := c.PostForm("summary")
 	author := c.PostForm("author")
 	authorID,_ := strconv.ParseInt(author,10,64)
-	tags := c.PostForm("tags")
-
+	tags := c.PostFormArray("tags")
+	fmt.Println("-----")
+	fmt.Println(tags)
 	canComment := "on" == c.PostForm("can_comment")
 	publish := "on" == c.PostForm("publish")
 	post := &models.Post{
@@ -73,12 +73,16 @@ func PostCreatePost(c *gin.Context) {
 	}
 	post.ID = uint64(pID)
 	post.Update()
-	//originPostTags,_ := models.ListTagByPostID(post.ID)
-	_ = models.DeleteTagByPostID(pID)
-	for tagID := range tags {
-		models.InsertPostTag(pID,int64(tagID))
-	}
+	originPostTags,_ := models.ListTagByPostID(post.ID)
+	originPostTagNames := models.GetTagNames(originPostTags)
+	models.UpdateMultiTags(originPostTagNames, tags, int(post.ID))
+	//newTags, _ :=  models.ListTagByPostID(post.ID)
+	//post.Tags = newTags
 	posts, _ := models.ListPosts()
+	for _, post := range posts {
+		tags, _:= models.ListTagByPostID(post.ID)
+		post.Tags = tags
+	}
 	c.HTML(http.StatusOK,"admin/list_post.html",gin.H{
 		"posts": posts,
 		"post_count": len(posts),
@@ -86,10 +90,3 @@ func PostCreatePost(c *gin.Context) {
 	})
 }
 
-func needToAddTags(originPostTags []*models.Tag,) {
-
-}
-
-func needToDeleteTags() {
-
-}

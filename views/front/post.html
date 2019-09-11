@@ -1,0 +1,50 @@
+{{define "front/post.html"}}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    {{template "front/head.html"}}
+</head>
+<body>
+    {{template "front/menu.html"}}
+    <div class="container" id="content-outer">
+        <div class="inner" id="content-inner">
+            <div class="post-container">
+                <article class="post" id="post">
+                    <header class="post-header text-center">
+                        <h1 class="title">{{.post.Title}}</h1>
+                        <span>
+                            <time class="time" datetime="">
+                              {{dateFormat .post.CreatedAt "2006-01-02 15:04" }}
+                            </time>
+                         </span>
+                        <span class="slash">/</span>
+                        <span class="post-meta">
+                            <span class="post-tags">
+                              <ul class="article-tag-list">
+{{/*                                % for tag in post.tags:*/}}
+{{/*                                <li class="article-tag-list-item">*/}}
+{{/*                                  <a class="article-tag-list-link" href="${ post.url }">${ tag.name }</a>*/}}
+{{/*                                </li>*/}}
+{{/*                                % endfor*/}}
+                              </ul>
+                            </span>
+                      </span>
+                    </header>
+
+                    <div class="post-content">
+{{/*                        ${ post.html_content | n }*/}}
+                    </div>
+
+                </article>
+                <div class="toc-container"></div>
+            </div>
+        </div>
+
+    </div>
+
+    {{template "front/footer.html"}}
+</body>
+</html>
+{{end}}

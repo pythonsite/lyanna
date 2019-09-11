@@ -4,41 +4,44 @@
 <head>
     <meta charset="UTF-8">
     <title>Title</title>
-    <link rel="stylesheet" href="/static/css/pure-min.css">
-    <link rel="stylesheet" href="/static/css/main.css">
+    {{template "front/head.html"}}
 </head>
 <body>
-    <div class="nav-container">
-        <nav class="home-menu pure-menu pure-menu-horizontal">
-            <a class="pure-menu-heading" href="/">
-                <span class="title">我的博客</span>
-            </a>
 
-            <ul class="pure-menu-list clearfix">
-                <li class="pure-menu-item"><a href="/" class="pure-menu-link">首页</a></li>
-                <li class="pure-menu-item"><a href="/archives" class="pure-menu-link">归档</a></li>
-                <li class="pure-menu-item"><a href="/tags" class="pure-menu-link">标签</a></li>
-                <li class="pure-menu-item"><a href="/search" class="pure-menu-link">搜索</a></li>
-                <li class="pure-menu-item"><a href="/page/aboutme" class="pure-menu-link">关于</a></li>
-                <li class="pure-menu-item"><a href="/atom.xml" class="pure-menu-link">订阅</a></li>
-            </ul>
-        </nav>
-    </div>
+    {{template "front/menu.html"}}
+
 
     <div class="container" id="content-outer">
         <div class="inner" id="content-inner">
+            <div class="recent-posts">
+                {{ range .posts }}
+                <article class="recent-post-item">
+                    <a class="title" href="/post/{{.ID}}"><h2>{{.Title}}</h2></a>
+                    <div class="post-meta">
+                        <time class="time" datetime="{{dateFormat .CreatedAt "2006-01-02 15:04:05" }}">
+                            {{dateFormat .CreatedAt "2006-01-02 15:04" }}
+                        </time>
+                        <span class="slash">/</span>
+                        {{$PTGS := .Tags }}
+                        <ul class="index-tag-list">
+                            {{ range $k,$v := $PTGS}}
+                            <li class="index-tag-list-item"><a class="index-tag-list-link" href="/tag/{{$v.ID}}">{{$v.Name}}</a></li>
+                            {{end}}
+                        </ul>
+                    </div>
+                    <div class="post-excerpt">
+{{/*                        <p>${ post.excerpt }</p>*/}}
+                    </div>
 
+                    <a class="more" href="/post/{{.ID}}"> 阅读全文 〉</a>
+                </article>
+                {{end}}
+            </div>
         </div>
 
     </div>
+    {{template "front/footer.html"}}
 
-    <footer class="footer text-center">
-        <div id="bottom-inner">
-            <a class="bottom-item" href="/">首页</a> |
-            <a class="bottom-item" href="https://github.com/dongweiming/lyanna" target="_blank">GitHub</a> |
-            Powered by <a href="https://github.com/huge-success/sanic" target="_blank">Sanic</a>、<a href="https://github.com/dongweiming/sanic-mako" target="_blank">SanicMako</a> And other Sanic extensions
-        </div>
-    </footer>
 </body>
 </html>
 {{end}}

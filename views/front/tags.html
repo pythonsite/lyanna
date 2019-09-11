@@ -1,0 +1,30 @@
+{{define "front/tags.html"}}
+    <!DOCTYPE html>
+    <html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <title>Title</title>
+        {{template "front/head.html"}}
+    </head>
+    <body>
+    {{template "front/menu.html"}}
+    <div class="container" id="content-outer">
+        <div class="inner" id="content-inner">
+            <article class="post page" id="page">
+                <div class="post-content">
+                    <ul class="tag-list">
+                        {{ range .tags}}
+                        <li class="tag-list-item">
+                            <a class="tag-list-link" href="/tag/{{.ID}}">{{ .Name }}</a>
+                            <span class="tag-list-count">{{.Total}}</span>
+                        </li>
+                        {{end}}
+                    </ul>
+                </div>
+            </article>
+        </div>
+    </div>
+    {{template "front/footer.html"}}
+    </body>
+    </html>
+{{end}}

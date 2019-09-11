@@ -1,10 +1,7 @@
 runmode: debug
 general:
     addr: :9090
-    dsn: root:123456@(192.168.188.106:3306)/lyanna?charset=utf8&parseTime=True
+    dsn: root:123456@(192.168.188.106:3306)/lyanna?charset=utf8&parseTime=True&loc=Local
     redisurl: 192.168.188.106:6379
     sessionsecret: lyanna_blog
     logoutenabled: true
-
-
-

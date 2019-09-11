@@ -25,6 +25,8 @@ func main() {
 	router.Static("/static", filepath.Join(getCurrentDirectory(), "./static"))
 
 	router.GET("/", controllers.Index)
+	router.GET("/tags",controllers.Tags)
+	router.GET("/tag/:id",controllers.Tag)
 
 	router.GET("/admin/login",controllers.AdminLogin)
 	router.POST("/admin/login",controllers.UserLogin)

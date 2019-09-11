@@ -1,0 +1,33 @@
+{{define "front/tag.html"}}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    {{template "front/head.html"}}
+
+</head>
+<body>
+    {{template "front/menu.html"}}
+    <div class="container" id="content-outer">
+        <div class="inner" id="content-inner">
+            <div class="page tag-page" id="tag">
+                <h3 title="{{.tagName}}下的文章">{{.tagName}}</h3>
+                {{ range .posts}}
+                <div class="tag-item">
+                    <a href="/post/{{.ID}}">
+                       {{.Title}}
+                    </a>
+                    <time class="time" datetime="{{dateFormat .CreatedAt "2006-01-02 15:04:05" }}">
+                        {{dateFormat .CreatedAt "2006-01-02"}}
+                    </time>
+                </div>
+                {{end}}
+            </div>
+        </div>
+
+    </div>
+    {{template "front/footer.html"}}
+</body>
+</html>
+{{end}}

@@ -104,3 +104,8 @@ func CountPostByTag(tag string)(count int, err error) {
 	return
 }
 
+func PostCreatAndGetID(post *Post)error {
+	err := DB.Create(post).Row().Scan(post)
+	return err
+}
+

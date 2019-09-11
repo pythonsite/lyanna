@@ -38,14 +38,16 @@ func main() {
 	router.GET("/admin/user/new",controllers.GetCreateUser)
 	router.POST("/admin/user/new", controllers.PostCreateUser)
 
-	router.GET("/admin/posts", controllers.PostIndex)
 
 	router.POST("/api/publish/:id", controllers.PostPublish)
 	router.DELETE("/api/publish/:id",controllers.DeletePublish)
 
+	router.GET("/admin/posts", controllers.PostIndex)
 	router.GET("/admin/post/edit/:id", controllers.GetEditPost)
+	router.POST("/admin/post/edit/:id",controllers.UpdatePost)
 	router.GET("/admin/post/new",controllers.GetNewPost)
-	router.POST("/admin/post/edit/:id",controllers.PostCreatePost)
+	router.POST("/admin/post/new", controllers.AddPost)
+
 
 	//admin := router.Group("/admin")
 	//{

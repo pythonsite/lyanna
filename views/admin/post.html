@@ -19,7 +19,7 @@
                 {{end}}
             </ul>
 
-            <form class="uk-form-horizontal uk-margin-large user-form" action="{{ if .post }}/admin/post/edit/{{.post.ID}} {{else}} /admin/user/new{{end}}" method="POST" name="post_form">
+            <form class="uk-form-horizontal uk-margin-large user-form" action="{{ if .post }}/admin/post/edit/{{.post.ID}} {{else}} /admin/post/new{{end}}" method="POST" name="post_form">
                 <fieldset class="uk-fieldset">
                     <div class="uk-margin">
                         <label class="uk-form-label" for="">Title</label>
@@ -45,26 +45,32 @@
                             <textarea name="content" class="uk-textarea">{{if .post }}{{.Content}}{{end}}</textarea>
                         </div>
                     </div>
-                    {{$p := .post}}
-                    {{$pt := .postTags}}
                     <div class="uk-margin">
                         <label class="uk-form-label" for="">Tag</label>
                         <div class="uk-form-controls">
-
                             <select name="tags" multiple="multiple">
+                                {{if .post }}
+                                 {{$p := .post }}
+                                 {{$PT := .postTags }}
                                 {{ range $i,$j := .allTags }}
-                                <option value="{{$j.Name}}" {{if $p.IsInAllTags $j.Name $pt }}selected="selected"{{end}}>{{$j.Name}}</option>
+                                <option value="{{$j.Name}}" {{if $p.IsInAllTags $j.Name $PT }}selected="selected"{{end}}>{{$j.Name}}</option>
                                 {{end}}
+                                 {{else}}
+                                    {{ range $i,$j := .allTags }}
+                                        <option value="{{$j.Name}}">{{$j.Name}}</option>
+                                    {{end}}
+                                 {{end}}
                             </select>
 
                         </div>.
                     </div>
-                    {{$AID := .post.AuthorID}}
+
                     <div class="uk-margin">
                         <label class="uk-form-label" for="">Author</label>
                         <div class="uk-form-controls">
                             <select name="author">
-
+                                {{ if .post }}
+                                {{$AID := .post.AuthorID}}
                                 {{ range $k,$v := .users }}
                                 <option value="{{$v.ID}}"
                                         {{if eq $AID $v.ID }}
@@ -73,6 +79,12 @@
                                 >{{$v.Name}}
                                 </option>
                                {{end}}
+                               {{else}}
+                                {{ range $k,$v := .users }}
+                                <option value="{{$v.ID}}"
+                                >{{$v.Name}}
+                               {{end}}
+                                {{end}}
                             </select>
                         </div>
                     </div>

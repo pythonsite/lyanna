@@ -50,10 +50,48 @@ func GetEditPost(c *gin.Context) {
 }
 
 func GetNewPost(c *gin.Context) {
-	c.HTML(http.StatusOK, "admin/post.html",nil)
+	allTags, _ := models.ListALlTags()
+	users, _:= models.ListUsers()
+	c.HTML(http.StatusOK, "admin/post.html",gin.H{
+		"allTags":allTags,
+		"users":users,
+	})
 }
 
-func PostCreatePost(c *gin.Context) {
+func AddPost(c *gin.Context){
+	title := c.PostForm("title")
+	slug := c.PostForm("slug")
+	summary := c.PostForm("summary")
+	author := c.PostForm("author")
+	authorID,_ := strconv.ParseInt(author,10,64)
+	tags := c.PostFormArray("tags")
+	content := c.PostForm("content")
+	canComment := "on" == c.PostForm("can_comment")
+	publish := "on" == c.PostForm("publish")
+	post := &models.Post{
+		Title:title,
+		Slug:slug,
+		Summary:summary,
+		AuthorID:int(authorID),
+		CanComment:canComment,
+		Published:publish,
+	}
+	_ = models.PostCreatAndGetID(post)
+	models.SetContent(int(post.ID), content)
+	models.UpdateMultiTags([]string{}, tags, int(post.ID))
+	posts, _ := models.ListPosts()
+	for _, post := range posts {
+		tags, _:= models.ListTagByPostID(post.ID)
+		post.Tags = tags
+	}
+	c.HTML(http.StatusOK,"admin/list_post.html",gin.H{
+		"posts": posts,
+		"post_count": len(posts),
+		"msg":"Post was successfully created.",
+	})
+}
+
+func UpdatePost(c *gin.Context) {
 	id := c.Param("id")
 	pID, _ := strconv.ParseInt(id,10,64)
 	title := c.PostForm("title")
@@ -63,8 +101,6 @@ func PostCreatePost(c *gin.Context) {
 	authorID,_ := strconv.ParseInt(author,10,64)
 	tags := c.PostFormArray("tags")
 	content := c.PostForm("content")
-	fmt.Println("-----")
-	fmt.Println(tags)
 	canComment := "on" == c.PostForm("can_comment")
 	publish := "on" == c.PostForm("publish")
 	post := &models.Post{
@@ -89,7 +125,7 @@ func PostCreatePost(c *gin.Context) {
 	c.HTML(http.StatusOK,"admin/list_post.html",gin.H{
 		"posts": posts,
 		"post_count": len(posts),
-		"msg":"User was successfully created.",
+		"msg":"Update post successfully.",
 	})
 }
 

@@ -6,12 +6,6 @@ import (
 	"net/http"
 )
 
-func IndexGet(c *gin.Context) {
-	c.HTML(http.StatusOK,"index.html",gin.H{
-		"title":"hello golang",
-	})
-}
-
 func AdminLogin(c *gin.Context) {
 	c.HTML(http.StatusOK,"admin/login.html",nil)
 }

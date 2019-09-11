@@ -23,7 +23,8 @@ func main() {
 
 
 	router.Static("/static", filepath.Join(getCurrentDirectory(), "./static"))
-	//router.GET("/", controllers.IndexGet)
+
+	router.GET("/", controllers.Index)
 
 	router.GET("/admin/login",controllers.AdminLogin)
 	router.POST("/admin/login",controllers.UserLogin)

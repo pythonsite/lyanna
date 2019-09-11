@@ -3,7 +3,9 @@ package controllers
 import (
 	"fmt"
 	"github.com/gin-gonic/gin"
-	"log"
+	"github.com/microcosm-cc/bluemonday"
+	"github.com/russross/blackfriday"
+	"html/template"
 	"lyanna/models"
 	"net/http"
 	"strconv"
@@ -14,7 +16,6 @@ func PostIndex(c *gin.Context) {
 	for _, post := range posts {
 		tags, _:= models.ListTagByPostID(post.ID)
 		post.Tags = tags
-		log.Println(tags)
 	}
 	c.HTML(http.StatusOK, "admin/list_post.html", gin.H{
 		"posts": posts,
@@ -89,6 +90,22 @@ func PostCreatePost(c *gin.Context) {
 		"posts": posts,
 		"post_count": len(posts),
 		"msg":"User was successfully created.",
+	})
+}
+
+func GetPost(c *gin.Context) {
+	id := c.Param("id")
+	postID, _ := strconv.ParseUint(id,10,64)
+	post, _ := models.GetPostByID(postID)
+	tags ,_ := models.ListTagByPostID(post.ID)
+	post.Tags = tags
+	content := models.GetContent(int(postID))
+	policy := bluemonday.UGCPolicy()
+	unsafe := blackfriday.Run([]byte(content))
+	contentHtml:=template.HTML(string(policy.SanitizeBytes(unsafe)))
+	c.HTML(http.StatusOK,"front/post.html",gin.H{
+		"post":post,
+		"contentHtml":contentHtml,
 	})
 }
 

@@ -27,6 +27,7 @@ func main() {
 	router.GET("/", controllers.Index)
 	router.GET("/tags",controllers.Tags)
 	router.GET("/tag/:id",controllers.Tag)
+	router.GET("/post/:id",controllers.GetPost)
 
 	router.GET("/admin/login",controllers.AdminLogin)
 	router.POST("/admin/login",controllers.UserLogin)

@@ -1,0 +1,42 @@
+{{define "front/archives.html"}}
+    <!DOCTYPE html>
+    <html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <title>Title</title>
+        {{template "front/head.html"}}
+    </head>
+    <body>
+    {{template "front/menu.html"}}
+    <div class="container" id="content-outer">
+        <div class="inner" id="content-inner">
+            <section class="post page archives">
+                {{ range $Year, $Posts :=  .ArchiveResult}}
+                <h3 class="archive-year-wrap">
+                    <a href="/archives/{{$Year}}" class="archive-year">
+                        {{$Year}}
+                    </a>
+                </h3>
+
+                <div class="archives">
+                    {{ range $Post :=  $Posts}}
+                    <div class="archive">
+                        <a class="post-go" href="/post/{{$Post.ID}}">
+                             <div>
+                                <span class="date">{{dateFormat $Post.CreatedAt "2006-01-02" }}</span>
+                                 <span class="slash">/</span>
+                                 {{$Post.Title}}
+                             </div>
+                        </a>
+                    </div>
+                    {{end}}
+                </div>
+                {{end}}
+            </section>
+
+    </div>
+    {{template "front/footer.html"}}
+    </div>
+    </body>
+    </html>
+{{end}}

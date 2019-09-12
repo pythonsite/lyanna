@@ -2,7 +2,9 @@ package models
 
 import (
 	"database/sql"
+	"fmt"
 	"strconv"
+	"time"
 )
 
 var RedisPostKey string = "posts/%d/props/content"
@@ -109,3 +111,34 @@ func PostCreatAndGetID(post *Post)error {
 	return err
 }
 
+type Archive struct {
+	ArchiveDate time.Time
+	Total int
+	Year string
+}
+
+func ListPostArchives()([]*Archive, error) {
+	var archives []*Archive
+	rows, _ := DB.Raw("select DATE_FORMAT(created_at,'%Y') as year, count(*) as total from posts group by year order by year desc").Rows()
+	defer rows.Close()
+	for rows.Next() {
+		var archive Archive
+		DB.ScanRows(rows, &archive)
+		archive.ArchiveDate, _ =  time.Parse("2006", archive.Year)
+		archives = append(archives, &archive)
+	}
+	return archives, nil
+}
+
+func ListPostByArchive(year string)[]*Post {
+	condition := fmt.Sprintf("%s",year)
+	rows, _ := DB.Raw("select * from posts where date_format(created_at,'%Y')=? order by created_at desc",condition).Rows()
+	defer rows.Close()
+	posts := make([]*Post,0)
+	for rows.Next() {
+		var post Post
+		DB.ScanRows(rows,&post)
+		posts = append(posts, &post)
+	}
+	return posts
+}

@@ -29,12 +29,18 @@ func main() {
 	router.GET("/tag/:id",controllers.Tag)
 	router.GET("/post/:id",controllers.GetPost)
 
+	router.GET("/archives",controllers.Archives)
+
 	router.GET("/admin/login",controllers.AdminLogin)
+
 	router.POST("/admin/login",controllers.UserLogin)
+
 	router.GET("/admin",controllers.AdminIndex)
 	router.GET("/admin/users",controllers.UserList)
+
 	router.GET("/admin/edit/:id",controllers.GetEditUser)
 	router.POST("/admin/edit/:id",controllers.PostUserEdit)
+
 	router.GET("/admin/user/new",controllers.GetCreateUser)
 	router.POST("/admin/user/new", controllers.PostCreateUser)
 

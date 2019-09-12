@@ -9,8 +9,6 @@ import (
 func Index(c *gin.Context) {
 	var (
 		posts []*models.Post
-		//total int
-		//policy    *bluemonday.Policy
 		err error
 	)
 	posts , err = models.ListPublishedPost("")
@@ -23,5 +21,17 @@ func Index(c *gin.Context) {
 	}
 	c.HTML(http.StatusOK, "front/index.html",gin.H{
 		"posts":posts,
+	})
+}
+
+func Archives(c *gin.Context) {
+	var ArchiveResult = make(map[string][]*models.Post )
+	allArchives, _ := models.ListPostArchives()
+	for _, v := range allArchives {
+		posts := models.ListPostByArchive(v.Year)
+		ArchiveResult[v.Year] = posts
+	}
+	c.HTML(http.StatusOK,"front/archives.html", gin.H{
+		"ArchiveResult":ArchiveResult,
 	})
 }

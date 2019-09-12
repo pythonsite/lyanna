@@ -119,7 +119,7 @@ type Archive struct {
 
 func ListPostArchives()([]*Archive, error) {
 	var archives []*Archive
-	rows, _ := DB.Raw("select DATE_FORMAT(created_at,'%Y') as year, count(*) as total from posts group by year order by year desc").Rows()
+	rows, _ := DB.Raw("select DATE_FORMAT(created_at,'%Y') as year, count(*) as total from posts where published = ? group by year order by year desc",true).Rows()
 	defer rows.Close()
 	for rows.Next() {
 		var archive Archive
@@ -132,7 +132,7 @@ func ListPostArchives()([]*Archive, error) {
 
 func ListPostByArchive(year string)[]*Post {
 	condition := fmt.Sprintf("%s",year)
-	rows, _ := DB.Raw("select * from posts where date_format(created_at,'%Y')=? order by created_at desc",condition).Rows()
+	rows, _ := DB.Raw("select * from posts where date_format(created_at,'%Y')=? and published = ? order by created_at desc",condition,true).Rows()
 	defer rows.Close()
 	posts := make([]*Post,0)
 	for rows.Next() {

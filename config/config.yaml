@@ -5,3 +5,11 @@ general:
     redisurl: 192.168.188.106:6379
     sessionsecret: lyanna_blog
     logoutenabled: true
+
+github:
+    clientid: 6b61462cd8f0807f09a0
+    clientsecret: 93bfae7774a3bbd511a0f7eff996b9963cbfd61e
+    authurl: https://github.com/login/oauth/authorize?client_id=%s&scope=user:email&state=%s
+    # 与github配置的回调地址一致
+    redirecturl: http://127.0.0.1:9090/oauth2
+    tokenurl: https://github.com/login/oauth/access_token

@@ -32,6 +32,9 @@ func main() {
 	router.GET("/archives",controllers.Archives)
 	router.GET("/archives/:year",controllers.ArchivesByYear)
 
+	router.GET("/auth/oath",controllers.AuthGet)
+	router.GET("/oauth2",controllers.Oauth2Callback)
+
 	router.GET("/admin/login",controllers.AdminLogin)
 
 	router.POST("/admin/login",controllers.UserLogin)

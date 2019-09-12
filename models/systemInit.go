@@ -14,6 +14,7 @@ import (
 const (
 	SESSION_KEY = "UserID"
 	CONTEXT_USER_KEY = "User"
+	SESSION_GITHUB_STATE = "GITHUB_STATE" // github state session key
 )
 
 var (
@@ -31,6 +32,13 @@ type Config struct {
 		SessionSecret string
 		LogOutEnabled bool
 	}
+	GitHub struct{
+		ClientID string
+		ClientSecret string
+		AuthUrl string
+		RedirectUrl string
+		TokenUrl string
+	}
 }
 
 func checkError(err error) {
@@ -44,7 +52,7 @@ func InitDB()(err error) {
 	if err == nil {
 		log.Println("connect db success")
 		DB = db
-		DB.LogMode(true)
+		//DB.LogMode(true)
 		DB.AutoMigrate(&Comment{}, &Post{},&PostTag{}, ReactItem{},Tag{},User{})
 	}
 	return

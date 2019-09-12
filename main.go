@@ -30,6 +30,7 @@ func main() {
 	router.GET("/post/:id",controllers.GetPost)
 
 	router.GET("/archives",controllers.Archives)
+	router.GET("/archives/:year",controllers.ArchivesByYear)
 
 	router.GET("/admin/login",controllers.AdminLogin)
 

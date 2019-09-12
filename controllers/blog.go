@@ -35,3 +35,14 @@ func Archives(c *gin.Context) {
 		"ArchiveResult":ArchiveResult,
 	})
 }
+
+func ArchivesByYear(c *gin.Context) {
+	year := c.Param("year")
+	var ArchiveResult = make(map[string][]*models.Post )
+	posts := models.ListPostByArchive(year)
+	ArchiveResult[year] = posts
+	c.HTML(http.StatusOK,"front/archives.html",gin.H{
+		"ArchiveResult":ArchiveResult,
+	})
+
+}

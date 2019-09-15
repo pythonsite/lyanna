@@ -1,0 +1,100 @@
+{{ define "front/comment.html"}}
+<div class="gitment-container gitment-root-container">
+    <div class="gitment-container gitment-comments-container">
+        {{if .comments }}
+        <ul class="gitment-comments-list">
+            {{range $K, $Comment := .comments}}
+
+                {{ $GITUSER := $Comment.GitUser }}
+                <li class="gitment-comment">
+                    <a class="gitment-comment-avatar" href="{{ $GITUSER.Url }}" target="_blank">
+                        <img class="gitment-comment-avatar-img" src="{{$GITUSER.Picture }}">
+                    </a>
+                    <div class="gitment-comment-main">
+                        <div class="gitment-comment-header">
+
+                            <a class="gitment-comment-name" href="{{ if $GITUSER }}{{$GITUSER.Url }}{{else}}'#'{{end}}" target="_blank">
+                                {{$GITUSER.NickName }}
+                            </a>
+                            commented on
+
+                            <span title="${ comment.created_at }">{{dateFormat $Comment.CreatedAt "2006-01-02 15:04:05" }}</span>
+                            {{ if $GITUSER }}
+
+                                <div class="gitment-comment-like-btn ''}" data-id={{$Comment.ID }}>
+                                    <svg class="gitment-heart-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 50 50">
+                                        <path d="M25 39.7l-.6-.5C11.5 28.7 8 25 8 19c0-5 4-9 9-9 4.1 0 6.4 2.3 8 4.1 1.6-1.8 3.9-4.1 8-4.1 5 0 9 4 9 9 0 6-3.5 9.7-16.4 20.2l-.6.5zM17 12c-3.9 0-7 3.1-7 7 0 5.1 3.2 8.5 15 18.1 11.8-9.6 15-13 15-18.1 0-3.9-3.1-7-7-7-3.5 0-5.4 2.1-6.9 3.8L25 17.1l-1.1-1.3C22.4 14.1 20.5 12 17 12z"></path>
+                                    </svg>
+                                    <span>0</span>
+                                </div>
+                            {{end}}
+                        </div>
+
+                        <div class="gitment-comment-body gitment-markdown">{{ $Comment.ContentHTML $Comment.Content }}</div>
+                    </div>
+                </li>
+            {{end}}
+
+        </ul>
+{{/*        <ul class="gitment-comments-pagination">*/}}
+{{/*            <li class="gitment-comments-page-item gitment-hidden prev">Previous</li>*/}}
+{{/*            <%  n_pages = n_comments // comment_per_page %>*/}}
+{{/*            % for page in range(n_pages if not n_comments % comment_per_page else n_pages + 1):*/}}
+{{/*            <li class="gitment-comments-page-item ${'gitment-selected' if not page else ''}">${ page + 1}</li>*/}}
+{{/*            % endfor*/}}
+{{/*            <li class="gitment-comments-page-item ${'gitment-hidden' if n_comments <= comment_per_page else ''} next">Next</li>*/}}
+{{/*        </ul>*/}}
+        {{else}}
+        <div class="gitment-comments-empty">还没有评论</div>
+        {{end}}
+        <div>
+            <div class="gitment-container gitment-editor-container">
+
+                <a class="gitment-editor-avatar" href=" {{ if .githubuser }}gituser.Login{{else}}'/oauth/post/{{.post.ID}}'{{end}}">
+                    {{ if .githubuser }}
+                    <img class="gitment-editor-avatar-img" src="{{.githubuser.Picture}}">
+                    {{ else }}
+                    <svg class="gitment-github-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 50 50"><path d="M25 10c-8.3 0-15 6.7-15 15 0 6.6 4.3 12.2 10.3 14.2.8.1 1-.3 1-.7v-2.6c-4.2.9-5.1-2-5.1-2-.7-1.7-1.7-2.2-1.7-2.2-1.4-.9.1-.9.1-.9 1.5.1 2.3 1.5 2.3 1.5 1.3 2.3 3.5 1.6 4.4 1.2.1-1 .5-1.6 1-2-3.3-.4-6.8-1.7-6.8-7.4 0-1.6.6-3 1.5-4-.2-.4-.7-1.9.1-4 0 0 1.3-.4 4.1 1.5 1.2-.3 2.5-.5 3.8-.5 1.3 0 2.6.2 3.8.5 2.9-1.9 4.1-1.5 4.1-1.5.8 2.1.3 3.6.1 4 1 1 1.5 2.4 1.5 4 0 5.8-3.5 7-6.8 7.4.5.5 1 1.4 1 2.8v4.1c0 .4.3.9 1 .7 6-2 10.2-7.6 10.2-14.2C40 16.7 33.3 10 25 10z"></path></svg>
+                    {{ end }}
+                </a>
+
+                <div class="gitment-editor-main">
+                    <div class="gitment-editor-header">
+                        <nav class="gitment-editor-tabs">
+                            <button class="gitment-editor-tab write gitment-selected">输入</button>
+                            <button class="gitment-editor-tab preview">预览</button>
+                        </nav>
+                        <div class="gitment-editor-login">
+                            {{ if not .githubuser }}
+
+                            <a class="gitment-editor-login-link" href="/oauth/post/{{ .post.ID }}">Login</a>
+                            {{else }}
+                            <a class="gitment-editor-logout-link">{{.githubuser.Login}}</a>
+                            {{end}}
+                        </div>
+                    </div>
+                    <div class="gitment-editor-body">
+                        <div class="gitment-editor-write-field">
+                          <textarea placeholder="评价一下吧" title=""
+                                    {{if .githubuser }}
+                                    disabled
+                                    {{end}}
+                          ></textarea>
+                        </div>
+                        <div class="gitment-editor-preview-field gitment-hidden">
+                            <div class="gitment-editor-preview gitment-markdown">空空如也</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="gitment-editor-footer">
+                    <a class="gitment-editor-footer-tip" href="https://guides.github.com/features/mastering-markdown/" target="_blank">
+                        支持 Markdown 语法
+                    </a>
+                    <button class="gitment-editor-submit" title="">评论</button>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+{{end}}

@@ -136,12 +136,17 @@ func GetPost(c *gin.Context) {
 	tags ,_ := models.ListTagByPostID(post.ID)
 	post.Tags = tags
 	content := models.GetContent(int(postID))
+	comments, _ := models.ListCommentsByPostID(int(postID))
+	gitHubUser, _ := c.Get(models.CONTEXT_USER_KEY)
+
 	policy := bluemonday.UGCPolicy()
 	unsafe := blackfriday.Run([]byte(content))
 	contentHtml:=template.HTML(string(policy.SanitizeBytes(unsafe)))
 	c.HTML(http.StatusOK,"front/post.html",gin.H{
 		"post":post,
 		"contentHtml":contentHtml,
+		"comments": comments,
+		"githubuser":gitHubUser,
 	})
 }
 

@@ -101,6 +101,10 @@ func ShareData() gin.HandlerFunc {
 			if err == nil {
 				c.Set(models.CONTEXT_USER_KEY, user)
 			}
+			gitUser, err := models.GetGitUserByGid(uID)
+			if err != nil {
+				c.Set(models.CONTEXT_USER_KEY, gitUser)
+			}
 			if models.Conf.General.LogOutEnabled {
 				c.Set("LogOutEnabled", true)
 			}

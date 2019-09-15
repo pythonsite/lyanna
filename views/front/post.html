@@ -6,6 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1.0, user-scalable=no">
     <title>Title</title>
     {{template "front/head.html"}}
+    <link rel="stylesheet" href="/static/css/gitment.css">
 </head>
 <body>
     {{template "front/menu.html"}}
@@ -41,6 +42,8 @@
                 </article>
                 <div class="toc-container"></div>
             </div>
+
+            {{ template "front/comment.html"}}
 
             <div class="copyright">
                 <span>本作品采用</span>

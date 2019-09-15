@@ -51,3 +51,30 @@ func GetUserNameByID(userID int)(name string,err error) {
 	err = DB.First(&user,"id=?",userID).Error
 	return user.Name,err
 }
+
+
+type GitHubUser struct {
+	BaseModel
+	GID int64 `gorm:"unique_index"`
+	Email string
+	UserName string
+	Picture string
+	NickName string
+	Url string
+}
+
+func (gitUser *GitHubUser)InsertGitHubUser()error {
+	return 	DB.Create(gitUser).Error
+}
+
+func (gitUser *GitHubUser)FirstOrCreate()(*GitHubUser,error) {
+	err := DB.FirstOrCreate(gitUser,"g_id=?",gitUser.GID).Error
+	return gitUser, err
+}
+
+
+func GetGitUserByGid(gid interface{})(*GitHubUser,error) {
+	var gitUser GitHubUser
+	err := DB.First(&gitUser,"gid=?",gid).Error
+	return &gitUser, err
+}

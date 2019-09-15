@@ -15,13 +15,11 @@ import (
 
 type GithubUserInfo struct {
 	AvatarURL         string      `json:"avatar_url"`
-	CreatedAt         string      `json:"created_at"`
-	Email             interface{} `json:"email"`
-	HTMLURL           string      `json:"html_url"`
-	ID                int         `json:"id"`
-	Name              interface{} `json:"name"`
-	UpdatedAt         string      `json:"updated_at"`
-	URL               string      `json:"url"`
+	Email             string	  `json:"email"`
+	GID        		  int64          `json:"id"`
+	Name              string      `json:"name"`
+	Login 			  string 	  `json:"login"`
+	HtmlUrl 			string    `json:"html_url"`
 }
 
 func AuthGet(c *gin.Context) {
@@ -58,7 +56,32 @@ func Oauth2Callback(c *gin.Context) {
 		c.Redirect(http.StatusMovedPermanently, "/")
 		return
 	}
-	getGitHubUserInfoByToken(token)
+	gitHubUser, err := getGitHubUserInfoByToken(token)
+	fmt.Println(gitHubUser)
+	if err != nil {
+		c.Redirect(http.StatusMovedPermanently, "/")
+		return
+	}
+
+	gituser := &models.GitHubUser{
+		GID:gitHubUser.GID,
+		Email:gitHubUser.Email,
+		Picture: gitHubUser.AvatarURL,
+		UserName:gitHubUser.Name,
+		NickName:gitHubUser.Login,
+		Url:gitHubUser.HtmlUrl,
+	}
+
+	gituser,err = gituser.FirstOrCreate()
+	if err == nil {
+		s := sessions.Default(c)
+		s.Clear()
+		s.Set(models.SESSION_KEY, gituser.GID)
+		s.Save()
+		c.Redirect(http.StatusMovedPermanently,"/post/2")
+	}
+
+
 }
 
 func GetTokenByCode(code string)(accessToken string, err error) {
@@ -89,7 +112,7 @@ func GetTokenByCode(code string)(accessToken string, err error) {
 	return
 }
 
-func getGitHubUserInfoByToken(token string)() {
+func getGitHubUserInfoByToken(token string)(*GithubUserInfo, error){
 	var (
 		resp *http.Response
 		body []byte
@@ -97,14 +120,15 @@ func getGitHubUserInfoByToken(token string)() {
 	)
 	resp, err = http.Get(fmt.Sprintf("https://api.github.com/user?access_token=%s", token))
 	if err != nil {
-		return
+		return nil, err
 	}
 	defer resp.Body.Close()
 	body, err = ioutil.ReadAll(resp.Body)
 	if err != nil {
-		return
+		return nil, err
 	}
 	var userInfo GithubUserInfo
 	err = json.Unmarshal(body, &userInfo)
 	fmt.Println(userInfo)
+	return &userInfo, err
 }

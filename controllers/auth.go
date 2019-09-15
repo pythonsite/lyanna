@@ -11,6 +11,8 @@ import (
 	"lyanna/models"
 	"lyanna/utils"
 	"net/http"
+	"strconv"
+	"strings"
 )
 
 type GithubUserInfo struct {
@@ -23,6 +25,9 @@ type GithubUserInfo struct {
 }
 
 func AuthGet(c *gin.Context) {
+	id := c.Param("id")
+	postID, _ := strconv.ParseUint(id,10,64)
+	fmt.Println(postID)
 	uuid := utils.UUID()
 	session := sessions.Default(c)
 	session.Delete(models.SESSION_GITHUB_STATE)
@@ -33,16 +38,14 @@ func AuthGet(c *gin.Context) {
 }
 
 func Oauth2Callback(c *gin.Context) {
-	//var (
-	//	userInfo *GithubUserInfo
-	//	user     *models.User
-	//)
 	code := c.Query("code")
 	state := c.Query("state")
-
+	refer := c.Request.Header.Get("referer")
+	referArray := strings.Split(refer,"/")
+	postID  := referArray[len(referArray)-1]
+	fmt.Println(123123)
+	fmt.Println(refer)
 	session := sessions.Default(c)
-	fmt.Println(state)
-	fmt.Println(session.Get(models.SESSION_GITHUB_STATE))
 	if len(state) == 0 || state != session.Get(models.SESSION_GITHUB_STATE) {
 		c.Abort()
 		return
@@ -56,20 +59,22 @@ func Oauth2Callback(c *gin.Context) {
 		c.Redirect(http.StatusMovedPermanently, "/")
 		return
 	}
-	gitHubUser, err := getGitHubUserInfoByToken(token)
-	fmt.Println(gitHubUser)
+	gituserinfo, err := getGitHubUserInfoByToken(token)
 	if err != nil {
 		c.Redirect(http.StatusMovedPermanently, "/")
 		return
 	}
-
 	gituser := &models.GitHubUser{
-		GID:gitHubUser.GID,
-		Email:gitHubUser.Email,
-		Picture: gitHubUser.AvatarURL,
-		UserName:gitHubUser.Name,
-		NickName:gitHubUser.Login,
-		Url:gitHubUser.HtmlUrl,
+		GID:gituserinfo.GID,
+		Email:gituserinfo.Email,
+		Picture: gituserinfo.AvatarURL,
+		UserName:gituserinfo.Name,
+		NickName:gituserinfo.Login,
+		Url:gituserinfo.HtmlUrl,
+	}
+	path := "/"
+	if len(postID) != 0 {
+		path = "/post/"+ postID
 	}
 
 	gituser,err = gituser.FirstOrCreate()
@@ -78,10 +83,8 @@ func Oauth2Callback(c *gin.Context) {
 		s.Clear()
 		s.Set(models.SESSION_KEY, gituser.GID)
 		s.Save()
-		c.Redirect(http.StatusMovedPermanently,"/post/2")
+		c.Redirect(http.StatusMovedPermanently,path)
 	}
-
-
 }
 
 func GetTokenByCode(code string)(accessToken string, err error) {
@@ -129,6 +132,5 @@ func getGitHubUserInfoByToken(token string)(*GithubUserInfo, error){
 	}
 	var userInfo GithubUserInfo
 	err = json.Unmarshal(body, &userInfo)
-	fmt.Println(userInfo)
 	return &userInfo, err
 }

@@ -21,3 +21,20 @@ func GetContent(postID int) string {
 	value, _ := redis.String(conn.Do("get",key))
 	return value
 }
+
+func getCommentKey(commentID interface{}) string {
+	return fmt.Sprintf(RedisCommentKey, commentID)
+}
+
+func SetCommentContent(commentID int64, value string) {
+	key := getCommentKey(commentID)
+	conn := RedisPool.Get()
+	_,_ = conn.Do("set",key, value)
+}
+
+func GetCommentContent(commentID interface{}) string {
+	key := getCommentKey(commentID)
+	conn := RedisPool.Get()
+	value, _ := redis.String(conn.Do("get",key))
+	return value
+}

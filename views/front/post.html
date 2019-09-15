@@ -6,6 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1.0, user-scalable=no">
     <title>Title</title>
     {{template "front/head.html"}}
+    <meta name="post_id" content="{{.post.ID}}">
     <link rel="stylesheet" href="/static/css/gitment.css">
 </head>
 <body>
@@ -43,7 +44,7 @@
                 <div class="toc-container"></div>
             </div>
 
-            {{ template "front/comment.html"}}
+            {{ template "front/comment.html" . }}
 
             <div class="copyright">
                 <span>本作品采用</span>
@@ -53,8 +54,8 @@
         </div>
 
     </div>
-
     {{template "front/footer.html"}}
+    <script src="/static/dist/comment.js"></script>
 </body>
 </html>
 {{end}}

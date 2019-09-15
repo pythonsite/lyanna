@@ -75,6 +75,6 @@ func (gitUser *GitHubUser)FirstOrCreate()(*GitHubUser,error) {
 
 func GetGitUserByGid(gid interface{})(*GitHubUser,error) {
 	var gitUser GitHubUser
-	err := DB.First(&gitUser,"gid=?",gid).Error
+	err := DB.First(&gitUser,"g_id=?",gid).Error
 	return &gitUser, err
 }

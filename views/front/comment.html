@@ -29,8 +29,8 @@
                                 </div>
                             {{end}}
                         </div>
-
-                        <div class="gitment-comment-body gitment-markdown">{{ $Comment.ContentHTML $Comment.Content }}</div>
+                        {{$Conent := $Comment.GetComment $Comment.ID}}
+                        <div class="gitment-comment-body gitment-markdown">{{ $Comment.CommentHTML $Conent  }}</div>
                     </div>
                 </li>
             {{end}}
@@ -50,7 +50,7 @@
         <div>
             <div class="gitment-container gitment-editor-container">
 
-                <a class="gitment-editor-avatar" href=" {{ if .githubuser }}gituser.Login{{else}}'/oauth/post/{{.post.ID}}'{{end}}">
+                <a class="gitment-editor-avatar" href="{{ if .githubuser }}gituser.NickName{{else}}'/oauth2/auth/post/{{.post.ID}}'{{end}}">
                     {{ if .githubuser }}
                     <img class="gitment-editor-avatar-img" src="{{.githubuser.Picture}}">
                     {{ else }}
@@ -66,17 +66,16 @@
                         </nav>
                         <div class="gitment-editor-login">
                             {{ if not .githubuser }}
-
-                            <a class="gitment-editor-login-link" href="/oauth/post/{{ .post.ID }}">Login</a>
+                            <a class="gitment-editor-login-link" href="/oauth2/auth/post/{{ .post.ID }}">Login</a>
                             {{else }}
-                            <a class="gitment-editor-logout-link">{{.githubuser.Login}}</a>
+                            <a class="gitment-editor-logout-link">{{.githubuser.NickName}}</a>
                             {{end}}
                         </div>
                     </div>
                     <div class="gitment-editor-body">
                         <div class="gitment-editor-write-field">
                           <textarea placeholder="评价一下吧" title=""
-                                    {{if .githubuser }}
+                                    {{if not .githubuser }}
                                     disabled
                                     {{end}}
                           ></textarea>

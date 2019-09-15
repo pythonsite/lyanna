@@ -32,8 +32,9 @@ func main() {
 	router.GET("/archives",controllers.Archives)
 	router.GET("/archives/:year",controllers.ArchivesByYear)
 
-	router.GET("/auth/oath",controllers.AuthGet)
+	router.GET("/oauth2/auth",controllers.AuthGet)
 	router.GET("/oauth2",controllers.Oauth2Callback)
+	router.GET("/oauth2/auth/post/:id", controllers.AuthGet)
 
 	router.GET("/admin/login",controllers.AdminLogin)
 
@@ -57,6 +58,8 @@ func main() {
 	router.POST("/admin/post/edit/:id",controllers.UpdatePost)
 	router.GET("/admin/post/new",controllers.GetNewPost)
 	router.POST("/admin/post/new", controllers.AddPost)
+
+	router.POST("/comment/:id", controllers.CreateComment)
 
 
 	//admin := router.Group("/admin")
@@ -102,7 +105,7 @@ func ShareData() gin.HandlerFunc {
 				c.Set(models.CONTEXT_USER_KEY, user)
 			}
 			gitUser, err := models.GetGitUserByGid(uID)
-			if err != nil {
+			if err == nil {
 				c.Set(models.CONTEXT_USER_KEY, gitUser)
 			}
 			if models.Conf.General.LogOutEnabled {

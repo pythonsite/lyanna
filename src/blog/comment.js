@@ -6,7 +6,7 @@ let $writeTextarea = $editorWriteField.find('textarea');
 let $editorPreviewField = $('.gitment-editor-preview-field');
 let $loginBtn = $('.gitment-editor-login-link');
 let $submitBtn = $('.gitment-editor-submit');
-
+let $isEmptyDiv = $('.gitment-comments-empty');
 
 const target_id = $('meta[name=post_id]').attr('content');
 
@@ -62,6 +62,7 @@ $submitBtn.click((e)=> {
                 self.html('评论')
                 $commentContainer.prepend(rs.html)
                 console.log('评论成功')
+                $isEmptyDiv.remove()
             } else {
                 console.log('评论失败')
             }

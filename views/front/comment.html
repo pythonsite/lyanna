@@ -5,7 +5,6 @@
         <ul class="gitment-comments-list">
             {{if .comments }}
             {{range $K, $Comment := .comments}}
-
                 {{ $GITUSER := $Comment.GitUser }}
                 <li class="gitment-comment">
                     <a class="gitment-comment-avatar" href="{{ $GITUSER.Url }}" target="_blank">
@@ -33,11 +32,13 @@
                         {{$Conent := $Comment.GetComment $Comment.ID}}
                         <div class="gitment-comment-body gitment-markdown">{{ $Comment.CommentHTML $Conent  }}</div>
                     </div>
-                    {{end}}
                 </li>
-
-
+            {{end}}
+            {{end}}
         </ul>
+        {{ if not .comments}}
+             <div class="gitment-comments-empty">还没有评论</div>
+        {{end}}
 {{/*        <ul class="gitment-comments-pagination">*/}}
 {{/*            <li class="gitment-comments-page-item gitment-hidden prev">Previous</li>*/}}
 {{/*            <%  n_pages = n_comments // comment_per_page %>*/}}
@@ -46,9 +47,7 @@
 {{/*            % endfor*/}}
 {{/*            <li class="gitment-comments-page-item ${'gitment-hidden' if n_comments <= comment_per_page else ''} next">Next</li>*/}}
 {{/*        </ul>*/}}
-        {{else}}
-        <div class="gitment-comments-empty">还没有评论</div>
-        {{end}}
+
         <div>
             <div class="gitment-container gitment-editor-container">
 

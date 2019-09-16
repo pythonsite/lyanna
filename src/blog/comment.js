@@ -27,7 +27,7 @@ $editorTab.click((e)=> {
             }
             $editorPreview.html('渲染中...')
             $.ajax({
-                url: '/j/markdown',
+                url: '/comment/markdown',
                 type: 'post',
                 data: {'text': text},
                 dataType: 'json',
@@ -51,7 +51,7 @@ $submitBtn.click((e)=> {
     self.html('提交...')
     self.attr('disabled', true)
     $.ajax({
-        url: `/comment/${target_id}`,
+        url: `/comment/post/${target_id}`,
         type: 'post',
         data: {'content': content},
         dataType: 'json',

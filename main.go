@@ -59,7 +59,8 @@ func main() {
 	router.GET("/admin/post/new",controllers.GetNewPost)
 	router.POST("/admin/post/new", controllers.AddPost)
 
-	router.POST("/comment/:id", controllers.CreateComment)
+	router.POST("/comment/post/:id", controllers.CreateComment)
+	router.POST("/comment/markdown",controllers.CommentMarkdown)
 
 
 	//admin := router.Group("/admin")

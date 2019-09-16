@@ -3,6 +3,9 @@ package controllers
 import (
 	"github.com/gin-contrib/sessions"
 	"github.com/gin-gonic/gin"
+	"github.com/microcosm-cc/bluemonday"
+	"github.com/russross/blackfriday"
+	"html/template"
 	"lyanna/models"
 	"lyanna/utils"
 	"net/http"
@@ -26,5 +29,16 @@ func CreateComment(c *gin.Context) {
 	c.JSON(http.StatusOK,gin.H{
 		"r":0,
 		"html":commentHTML,
+	})
+}
+
+func CommentMarkdown(c *gin.Context) {
+	commentContent := c.Request.PostFormValue("text")
+	policy := bluemonday.UGCPolicy()
+	unsafe := blackfriday.Run([]byte(commentContent))
+	commentHtml:= template.HTML(string(policy.SanitizeBytes(unsafe)))
+	c.JSON(http.StatusOK, gin.H{
+		"r":0,
+		"text": commentHtml,
 	})
 }

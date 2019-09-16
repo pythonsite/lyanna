@@ -4,6 +4,7 @@ import (
 	"github.com/gin-contrib/sessions"
 	"github.com/gin-gonic/gin"
 	"lyanna/models"
+	"lyanna/utils"
 	"net/http"
 	"strconv"
 )
@@ -14,15 +15,16 @@ func CreateComment(c *gin.Context) {
 	postID,_ := strconv.ParseInt(postIDStr,10,64)
 	session := sessions.Default(c)
 	gid := session.Get(models.SESSION_KEY)
-	comment := &models.Comment{
+	comment := models.Comment{
 		GitHubID:gid.(int64),
 		PostID:postID,
 		RefID:0,
 	}
-	_ = models.CommentCreatAndGetID(comment)
+	_ = models.CommentCreatAndGetID(&comment)
 	models.SetCommentContent(int64(comment.ID), content)
+	commentHTML,_ := utils.RenderSingleCommnet(&comment)
 	c.JSON(http.StatusOK,gin.H{
 		"r":0,
+		"html":commentHTML,
 	})
-
 }

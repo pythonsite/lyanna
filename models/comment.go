@@ -23,7 +23,7 @@ func (comment *Comment) Insert()error{
 
 func ListCommentsByPostID(postid int)([]*Comment, error){
 	var comments []*Comment
-	err := DB.Model(&Comment{}).Find(&comments,"post_id=?",postid).Error
+	err := DB.Model(&Comment{}).Order("id desc").Find(&comments,"post_id=?",postid).Error
 	fmt.Println(comments)
 	return comments,err
 }

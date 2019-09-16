@@ -1,8 +1,9 @@
 {{ define "front/comment.html"}}
 <div class="gitment-container gitment-root-container">
     <div class="gitment-container gitment-comments-container">
-        {{if .comments }}
+
         <ul class="gitment-comments-list">
+            {{if .comments }}
             {{range $K, $Comment := .comments}}
 
                 {{ $GITUSER := $Comment.GitUser }}
@@ -32,8 +33,9 @@
                         {{$Conent := $Comment.GetComment $Comment.ID}}
                         <div class="gitment-comment-body gitment-markdown">{{ $Comment.CommentHTML $Conent  }}</div>
                     </div>
+                    {{end}}
                 </li>
-            {{end}}
+
 
         </ul>
 {{/*        <ul class="gitment-comments-pagination">*/}}

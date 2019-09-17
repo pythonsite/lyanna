@@ -86,6 +86,8 @@ func getCurrentDirectory() string {
 func setTemplate(engine *gin.Engine) {
 	funcMap := template.FuncMap{
 		"dateFormat": utils.DateFormat,
+		"genList":utils.GenList,
+		"add": utils.Add,
 	}
 	engine.SetFuncMap(funcMap)
 	engine.LoadHTMLGlob(filepath.Join(getCurrentDirectory(), "./views/**/*"))

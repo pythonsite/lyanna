@@ -1,7 +1,6 @@
 {{ define "front/comment.html"}}
 <div class="gitment-container gitment-root-container">
     <div class="gitment-container gitment-comments-container">
-
         <ul class="gitment-comments-list">
             {{if .comments }}
             {{range $K, $Comment := .comments}}
@@ -36,17 +35,20 @@
             {{end}}
             {{end}}
         </ul>
+        {{ if .comments }}
+        {{$PAGES := genList .pages }}
+        <ul class="gitment-comments-pagination">
+            <li class="gitment-comments-page-item gitment-hidden prev">Previous</li>
+            {{ range $k, $q := $PAGES }}
+            <li class="gitment-comments-page-item {{ if not $q}}'gitment-selected'{{else}}''{{end}}">{{ add $q 1}}</li>
+            {{end}}
+
+            <li class="gitment-comments-page-item {{ if le .commentNum 10 }}'gitment-hidden'{{else}}''{{end}} } next">Next</li>
+        </ul>
         {{ if not .comments}}
              <div class="gitment-comments-empty">还没有评论</div>
         {{end}}
-{{/*        <ul class="gitment-comments-pagination">*/}}
-{{/*            <li class="gitment-comments-page-item gitment-hidden prev">Previous</li>*/}}
-{{/*            <%  n_pages = n_comments // comment_per_page %>*/}}
-{{/*            % for page in range(n_pages if not n_comments % comment_per_page else n_pages + 1):*/}}
-{{/*            <li class="gitment-comments-page-item ${'gitment-selected' if not page else ''}">${ page + 1}</li>*/}}
-{{/*            % endfor*/}}
-{{/*            <li class="gitment-comments-page-item ${'gitment-hidden' if n_comments <= comment_per_page else ''} next">Next</li>*/}}
-{{/*        </ul>*/}}
+        {{end}}
     </div>
     <div class="gitment-container gitment-editor-container">
         <a class="gitment-editor-avatar" href="{{ if .githubuser }}gituser.NickName{{else}}'/oauth2/auth/post/{{.post.ID}}'{{end}}">

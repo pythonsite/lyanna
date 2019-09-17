@@ -13,6 +13,18 @@ func DateFormat(date time.Time, layout string) string {
 	return date.Format(layout)
 }
 
+func GenList(n int) []int {
+	ret := make([]int, n)
+	for i := 0; i < n; i++ {
+		ret[i] = i
+	}
+	return ret
+}
+
+func Add(a1, a2 int) int {
+	return a1 + a2
+}
+
 func RenderSingleCommnet(comment *models.Comment)(string,error){
 	var (
 		commentHTML string

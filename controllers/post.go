@@ -141,12 +141,19 @@ func GetPost(c *gin.Context) {
 	policy := bluemonday.UGCPolicy()
 	unsafe := blackfriday.Run([]byte(content))
 	contentHtml:=template.HTML(string(policy.SanitizeBytes(unsafe)))
-
+	var pages int
+	if len(comments) % 10 == 0 {
+		pages = len(comments) / 10
+	} else {
+		pages =  len(comments) / 10 + 1
+	}
 	c.HTML(http.StatusOK,"front/post.html",gin.H{
 		"post":post,
 		"contentHtml":contentHtml,
 		"comments": comments,
 		"githubuser":gitHubUser,
+		"pages": pages,
+		"commentNum":len(comments),
 	})
 }
 

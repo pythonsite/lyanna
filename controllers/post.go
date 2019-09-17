@@ -7,6 +7,7 @@ import (
 	"github.com/russross/blackfriday"
 	"html/template"
 	"lyanna/models"
+	"lyanna/utils"
 	"net/http"
 	"strconv"
 )
@@ -147,13 +148,23 @@ func GetPost(c *gin.Context) {
 	} else {
 		pages =  len(comments) / 10 + 1
 	}
+	hh := utils.HH{
+		Post:post,
+		Comments:comments,
+		Githubuser:gitHubUser,
+		Pages:pages,
+		CommentNum:len(comments),
+	}
+	commentsHTML,_ := utils.RenderAllComment(hh)
+	res := template.HTML(commentsHTML)
 	c.HTML(http.StatusOK,"front/post.html",gin.H{
-		"post":post,
+		"Post":post,
 		"contentHtml":contentHtml,
-		"comments": comments,
-		"githubuser":gitHubUser,
-		"pages": pages,
-		"commentNum":len(comments),
+		"Comments": comments,
+		"Githubuser":gitHubUser,
+		"Pages": pages,
+		"CommentNum":len(comments),
+		"commentsHTML":res,
 	})
 }
 

@@ -25,6 +25,41 @@ func Add(a1, a2 int) int {
 	return a1 + a2
 }
 
+type HH struct{
+	Comments []*models.Comment
+	Githubuser interface{}
+	Post *models.Post
+	Pages int
+	CommentNum int
+}
+
+func RenderAllComment(hh HH) (string,error) {
+	var (
+		AllCommentHTML string
+		err error
+	)
+	funcMap := template.FuncMap{
+		"dateFormat": DateFormat,
+		"genList":GenList,
+		"add": Add,
+	}
+	tpl := template.New("comment.html")
+	tpl.Funcs(funcMap)
+	tpl, err = tpl.ParseFiles("./views/front/comment.html")
+	if err != nil {
+		fmt.Println(err)
+		return AllCommentHTML,err
+	}
+	var buf bytes.Buffer
+	err = tpl.Execute(&buf,hh)
+	if err != nil {
+		fmt.Println(err)
+		return AllCommentHTML,err
+	}
+	AllCommentHTML = buf.String()
+	return AllCommentHTML,nil
+}
+
 func RenderSingleCommnet(comment *models.Comment)(string,error){
 	var (
 		commentHTML string

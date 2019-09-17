@@ -23,6 +23,12 @@ func InsertPostTag(postID, TagID int64) {
 	DB.Save(&postTag)
 }
 
+func GetPostsByTags(postID int64,tagids []int64)[]*Post {
+	var posts []*Post
+	_ = DB.Raw("select p.* from post_tags pt inner join posts p on p.id= pt.post_id where p.id != ? and pt.tag_id not in (?)",postID,tagids).Find(&posts).Error
+	return posts
+}
+
 func ListTagByPostID (id interface{}) ([]*Tag,error) {
 	var tags []*Tag
 	rows,err := DB.Raw("select t.* from tags t inner join post_tags pt on t.id = pt.tag_id where pt.post_id = ?",id).Rows()

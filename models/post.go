@@ -3,6 +3,9 @@ package models
 import (
 	"database/sql"
 	"fmt"
+	"github.com/microcosm-cc/bluemonday"
+	"github.com/russross/blackfriday"
+	"html/template"
 	"strconv"
 	"time"
 )
@@ -32,6 +35,18 @@ func (post *Post) Update() {
 func (post *Post) GetUserName(userID int)string {
 	Name, _ := post.User.GetUserName(userID)
 	return Name
+}
+
+func (post *Post) Excerpt() template.HTML {
+	content :=GetContent(int(post.ID))
+	policy := bluemonday.StrictPolicy() //remove all html tags
+	sanitized := policy.Sanitize(string(blackfriday.Run([]byte(content))))
+	runes := []rune(sanitized)
+	if len(runes) > 300 {
+		sanitized = string(runes[:300])
+	}
+	excerpt := template.HTML(sanitized + "...")
+	return excerpt
 }
 
 func ListPosts()([]*Post, error) {

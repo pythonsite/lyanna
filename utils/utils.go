@@ -6,6 +6,7 @@ import (
 	"github.com/snluu/uuid"
 	"lyanna/models"
 	"math/rand"
+	"time"
 )
 
 func Md5(source string) string {
@@ -26,4 +27,9 @@ func RandomGetArray(origin []*models.Post, limit int) []*models.Post{
 		return origin
 	}
 	return origin[:limit]
+}
+
+func GetCurrentTime() time.Time {
+	loc, _ := time.LoadLocation("Asia/Shanghai")
+	return time.Now().In(loc)
 }

@@ -3,7 +3,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
+    <title>Fan's Blog</title>
     {{template "front/head.html"}}
 </head>
 <body>
@@ -30,7 +30,7 @@
                         </ul>
                     </div>
                     <div class="post-excerpt">
-{{/*                        <p>${ post.excerpt }</p>*/}}
+                        <p>{{.Excerpt}}</p>
                     </div>
 
                     <a class="more" href="/post/{{.ID}}"> 阅读全文 〉</a>

@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1.0, user-scalable=no">
-    <title>Title</title>
+    <title>Fan's Blog</title>
     <meta name="post_id" content="{{.Post.ID}}">
     {{template "front/head.html"}}
     <link rel="stylesheet" href="/static/css/main.css">
@@ -45,6 +45,11 @@
                 </article>
                 <div class="toc-container"></div>
             </div>
+            <div class="copyright">
+                <span>本作品采用</span>
+                <a href="https://creativecommons.org/licenses/by/4.0/">知识共享署名 4.0 国际许可协议</a>
+                <span>进行许可。 转载时请注明原文链接。</span>
+            </div>
             <ul id="related">
                 {{range .relatePosts }}
                     <li>
@@ -52,6 +57,8 @@
                     </li>
                 {{end}}
             </ul>
+            <div style="font-weight:700">评论列表</div>
+            <br>
             {{.commentsHTML}}
             {{ if .Comments }}
                 {{$PAGES := genList .Pages }}

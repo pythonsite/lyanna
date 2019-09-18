@@ -15,7 +15,7 @@ figure,
 menu,
 pre,
 ol,
-ul,
+/*ul,*/
 dd,
 dl {
   margin: 0;
@@ -192,7 +192,7 @@ body {
   position: fixed;
   z-index: 100;
   -ms-flex-align: center;
-      align-items: center;
+  align-items: center;
   width: 100%;
 }
 .nav-container .home-menu {
@@ -203,11 +203,11 @@ body {
   padding: 5px 20px;
   background: #fefefe;
   -ms-flex-direction: row;
-      flex-direction: row;
+  flex-direction: row;
   display: -ms-flexbox;
   display: flex;
   -ms-flex-pack: justify;
-      justify-content: space-between;
+  justify-content: space-between;
   overflow-y: scroll;
   max-width: 1000px;
   margin-left: auto;
@@ -216,7 +216,7 @@ body {
 @media screen and (max-width: 615px) {
   .nav-container .home-menu {
     -ms-flex-pack: center;
-        justify-content: center;
+    justify-content: center;
   }
 }
 @media screen and (min-width: 1280px) {
@@ -228,11 +228,11 @@ body {
   display: -ms-flexbox;
   display: flex;
   -ms-flex-direction: row;
-      flex-direction: row;
+  flex-direction: row;
   -ms-flex-align: center;
-      align-items: center;
+  align-items: center;
   -ms-flex-pack: center;
-      justify-content: center;
+  justify-content: center;
 }
 @media screen and (max-width: 615px) {
   .nav-container .home-menu .pure-menu-heading {
@@ -411,11 +411,11 @@ body {
   display: -ms-flexbox;
   display: flex;
   -ms-flex-direction: row;
-      flex-direction: row;
+  flex-direction: row;
   -ms-flex-align: center;
-      align-items: center;
+  align-items: center;
   -ms-flex-pack: center;
-      justify-content: center;
+  justify-content: center;
 }
 .post-container .toc-container .toc-article {
   display: none;
@@ -721,7 +721,7 @@ body {
 .post-nav .post-nav-item {
   display: inline-block;
   -ms-flex: 1;
-      flex: 1;
+  flex: 1;
   font-size: 14px;
   padding: 10px 0;
   position: relative;
@@ -1021,4 +1021,36 @@ code {
 
 footer .href-item:hover {
   color: #2196F3;
+}
+
+#related {
+  font-size: 13px;
+  line-height: 28px;
+  border: 1px solid #eee;
+  overflow: hidden;
+  padding: 1%;
+  border-radius: 3px;
+  margin-top: 30px;
+}
+
+#related li {
+  width: 50%;
+  overflow: hidden;
+  float: left;
+  border-radius: 3px;
+  position: relative;
+}
+
+#related li a {
+  padding: 4px 12px;
+  overflow: hidden;
+  display: block;
+  position: relative;
+  z-index: 1;
+  color: #333;
+}
+
+#related li:hover a {
+  background: #ddd;
+  color: #000;
 }

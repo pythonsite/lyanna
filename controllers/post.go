@@ -157,6 +157,10 @@ func GetPost(c *gin.Context) {
 	}
 	commentsHTML,_ := utils.RenderAllComment(hh)
 	res := template.HTML(commentsHTML)
+
+	relatePosts := GetPosts(int64(postID))
+
+
 	c.HTML(http.StatusOK,"front/post.html",gin.H{
 		"Post":post,
 		"contentHtml":contentHtml,
@@ -165,6 +169,17 @@ func GetPost(c *gin.Context) {
 		"Pages": pages,
 		"CommentNum":len(comments),
 		"commentsHTML":res,
+		"relatePosts": relatePosts,
 	})
 }
 
+func GetPosts(postID int64) []*models.Post {
+	tags, _ := models.ListTagByPostID(postID)
+	var tagids []int64
+	for _,tag := range tags {
+		tagids = append(tagids,int64(tag.ID))
+	}
+	posts := models.GetPostsByTags(postID,tagids)
+	result := utils.RandomGetArray(posts,4)
+	return result
+}

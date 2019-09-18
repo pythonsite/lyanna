@@ -5,9 +5,11 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1.0, user-scalable=no">
     <title>Title</title>
-    {{template "front/head.html"}}
     <meta name="post_id" content="{{.Post.ID}}">
+    {{template "front/head.html"}}
+    <link rel="stylesheet" href="/static/css/main.css">
     <link rel="stylesheet" href="/static/css/gitment.css">
+
 </head>
 <body>
     {{template "front/menu.html"}}
@@ -43,6 +45,13 @@
                 </article>
                 <div class="toc-container"></div>
             </div>
+            <ul id="related">
+                {{range .relatePosts }}
+                    <li>
+                        <a href="/post/{{.ID}}" title="{{.Title}}">{{.Title}}</a>
+                    </li>
+                {{end}}
+            </ul>
             {{.commentsHTML}}
             {{ if .Comments }}
                 {{$PAGES := genList .Pages }}
@@ -115,6 +124,7 @@
         </div>
 
     </div>
+
     {{template "front/footer.html"}}
     <script src="/static/dist/comment.js"></script>
 </body>

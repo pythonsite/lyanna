@@ -4,6 +4,8 @@ import (
 	"crypto/md5"
 	"encoding/hex"
 	"github.com/snluu/uuid"
+	"lyanna/models"
+	"math/rand"
 )
 
 func Md5(source string) string {
@@ -14,4 +16,14 @@ func Md5(source string) string {
 
 func UUID() string {
 	return uuid.Rand().Hex()
+}
+
+func RandomGetArray(origin []*models.Post, limit int) []*models.Post{
+	rand.Shuffle(len(origin), func(i, j int) {
+		origin[i],origin[j] = origin[j],origin[i]
+	})
+	if limit > len(origin) - 1 {
+		return origin
+	}
+	return origin[:limit]
 }

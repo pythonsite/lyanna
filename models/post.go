@@ -111,16 +111,6 @@ func PostCreatAndGetID(post *Post)error {
 	return err
 }
 
-func GetPosts(postID int64) {
-	tags, _ := ListTagByPostID(postID)
-	var tagids []int64
-	for _,tag := range tags {
-		tagids = append(tagids,int64(tag.ID))
-	}
-	posts := GetPostsByTags(postID,tagids)
-
-}
-
 type Archive struct {
 	ArchiveDate time.Time
 	Total int

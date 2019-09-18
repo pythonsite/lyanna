@@ -3,6 +3,9 @@ package controllers
 import (
 	"fmt"
 	"github.com/gin-gonic/gin"
+	"github.com/microcosm-cc/bluemonday"
+	"github.com/russross/blackfriday"
+	"html/template"
 	"lyanna/models"
 	"net/http"
 )
@@ -49,6 +52,35 @@ func ArchivesByYear(c *gin.Context) {
 	ArchiveResult[year] = posts
 	c.HTML(http.StatusOK,"front/archives.html",gin.H{
 		"ArchiveResult":ArchiveResult,
+	})
+
+}
+
+func AboutMe(c *gin.Context) {
+	slug := c.Param("aboutme")
+	if slug != "aboutme" {
+		c.AbortWithStatus(http.StatusInternalServerError)
+		return
+	}
+	fmt.Println(slug)
+	post,err := models.GetPostBySlug(slug)
+	if err != nil {
+
+		c.AbortWithStatus(http.StatusInternalServerError)
+		return
+	}
+	fmt.Println(post)
+	tags ,_ := models.ListTagByPostID(post.ID)
+	post.Tags = tags
+	content := models.GetContent(int(post.ID))
+	gitHubUser, _ := c.Get(models.CONTEXT_USER_KEY)
+	policy := bluemonday.UGCPolicy()
+	unsafe := blackfriday.Run([]byte(content))
+	contentHtml:=template.HTML(string(policy.SanitizeBytes(unsafe)))
+	c.HTML(http.StatusOK,"front/post.html",gin.H{
+		"Post":post,
+		"contentHtml":contentHtml,
+		"Githubuser":gitHubUser,
 	})
 
 }

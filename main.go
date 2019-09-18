@@ -63,7 +63,7 @@ func main() {
 	router.POST("/comment/markdown",controllers.CommentMarkdown)
 	router.GET("/comments/post/:id",controllers.Comments)
 	router.GET("/rss",controllers.GetRss)
-
+	router.GET("/page/:aboutme",controllers.AboutMe)
 
 	//admin := router.Group("/admin")
 	//{

@@ -1,3 +1,4 @@
+import SocialSharer from './social-sharer';
 let $commentContainer = $('.gitment-comments-list');
 let $editorTab = $('.gitment-editor-tab');
 let $editorPreview = $('.gitment-editor-preview')
@@ -110,3 +111,5 @@ $pageItemBtn.click((e)=> {
         }
     })
 });
+
+let socialSharer = new SocialSharer('.social-sharer');

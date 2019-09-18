@@ -9,6 +9,10 @@
     {{template "front/head.html"}}
     <link rel="stylesheet" href="/static/css/main.css">
     <link rel="stylesheet" href="/static/css/gitment.css">
+    <link rel="stylesheet" href="/static/css/social-sharer.min.css">
+    <!-- code syntax highlighting -->
+    <script src="https://cdn.jsdelivr.net/highlight.js/latest/highlight.min.js"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/highlight.js/latest/styles/github.min.css" />
 
 </head>
 <body>
@@ -38,9 +42,11 @@
                       </span>
                     </header>
 
-                    <div class="post-content">
-                        {{ .contentHtml }}
-                    </div>
+                    {{ if ne .Post.Slug "aboutme"}}
+                        <div class="post-content">
+                            {{ .contentHtml }}
+                        </div>
+                    {{end}}
 
                 </article>
                 <div class="toc-container"></div>
@@ -50,91 +56,90 @@
                 <a href="https://creativecommons.org/licenses/by/4.0/">知识共享署名 4.0 国际许可协议</a>
                 <span>进行许可。 转载时请注明原文链接。</span>
             </div>
-            <ul id="related">
-                {{range .relatePosts }}
-                    <li>
-                        <a href="/post/{{.ID}}" title="{{.Title}}">{{.Title}}</a>
-                    </li>
-                {{end}}
-            </ul>
-            <br>
-            <div style="font-weight:700">评论列表</div>
-            <br>
-            {{.commentsHTML}}
-            {{ if .Comments }}
-                {{$PAGES := genList .Pages }}
-                <div class="gitment-container gitment-comments-container ">
-                    <ul class="gitment-comments-pagination ">
-                        <li class="gitment-comments-page-item prev gitment-hidden">Previous</li>
-                        {{ range $k, $q := $PAGES }}
-                            <li class="gitment-comments-page-item {{ if not $q}}gitment-selected{{else}}''{{end}}">{{ add $q 1}}</li>
-                        {{end}}
+            <div class="social-sharer" data-title="{{.post.Title}}" date-url="/post/{{.post.ID}}" data-services="wechat,weibo,douban,yingxiang,linkedin"></div>
 
-                        <li class="gitment-comments-page-item {{ if le .CommentNum 10 }}gitment-hidden{{else}}''{{end}} } next">Next</li>
-                    </ul>
-                    {{ if not .Comments}}
-                        <div class="gitment-comments-empty">还没有评论</div>
+            {{if ne .Post.Slug "aboutme" }}
+                <ul id="related">
+                    {{range .relatePosts }}
+                        <li>
+                            <a href="/post/{{.ID}}" title="{{.Title}}">{{.Title}}</a>
+                        </li>
                     {{end}}
+                </ul>
+                <div id="reactions">
+                    <div class="text-bold align align--center">喜欢这篇文章吗? 记得给我留言或订阅哦</div>
+                </div>
+                <br>
+                {{.commentsHTML}}
+                {{ if .Comments }}
+                    {{$PAGES := genList .Pages }}
+                    <div class="gitment-container gitment-comments-container ">
+                        <ul class="gitment-comments-pagination ">
+                            <li class="gitment-comments-page-item prev gitment-hidden">Previous</li>
+                            {{ range $k, $q := $PAGES }}
+                                <li class="gitment-comments-page-item {{ if not $q}}gitment-selected{{else}}''{{end}}">{{ add $q 1}}</li>
+                            {{end}}
+
+                            <li class="gitment-comments-page-item {{ if le .CommentNum 10 }}gitment-hidden{{else}}''{{end}} } next">Next</li>
+                        </ul>
+                        {{ if not .Comments}}
+                            <div class="gitment-comments-empty">还没有评论</div>
+                        {{end}}
+                    </div>
+
+                {{end}}
+                <div class="gitment-container gitment-editor-container">
+                    <a class="gitment-editor-avatar" href="{{ if .Githubuser }}gituser.NickName{{else}}'/oauth2/auth/post/{{.Post.ID}}'{{end}}">
+                        {{ if .Githubuser }}
+                            <img class="gitment-editor-avatar-img" src="{{.Githubuser.Picture}}">
+                        {{ else }}
+                            <svg class="gitment-github-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 50 50"><path d="M25 10c-8.3 0-15 6.7-15 15 0 6.6 4.3 12.2 10.3 14.2.8.1 1-.3 1-.7v-2.6c-4.2.9-5.1-2-5.1-2-.7-1.7-1.7-2.2-1.7-2.2-1.4-.9.1-.9.1-.9 1.5.1 2.3 1.5 2.3 1.5 1.3 2.3 3.5 1.6 4.4 1.2.1-1 .5-1.6 1-2-3.3-.4-6.8-1.7-6.8-7.4 0-1.6.6-3 1.5-4-.2-.4-.7-1.9.1-4 0 0 1.3-.4 4.1 1.5 1.2-.3 2.5-.5 3.8-.5 1.3 0 2.6.2 3.8.5 2.9-1.9 4.1-1.5 4.1-1.5.8 2.1.3 3.6.1 4 1 1 1.5 2.4 1.5 4 0 5.8-3.5 7-6.8 7.4.5.5 1 1.4 1 2.8v4.1c0 .4.3.9 1 .7 6-2 10.2-7.6 10.2-14.2C40 16.7 33.3 10 25 10z"></path></svg>
+                        {{ end }}
+                    </a>
+
+                    <div class="gitment-editor-main">
+                        <div class="gitment-editor-header">
+                            <nav class="gitment-editor-tabs">
+                                <button class="gitment-editor-tab write gitment-selected">输入</button>
+                                <button class="gitment-editor-tab preview">预览</button>
+                            </nav>
+                            <div class="gitment-editor-login">
+                                {{ if not .Githubuser }}
+                                    <a class="gitment-editor-login-link" href="/oauth2/auth/post/{{ .Post.ID }}">Login</a>
+                                {{else }}
+                                    <a class="gitment-editor-logout-link">{{.Githubuser.NickName}}</a>
+                                {{end}}
+                            </div>
+                        </div>
+                        <div class="gitment-editor-body">
+                            <div class="gitment-editor-write-field">
+                      <textarea placeholder="评价一下吧" title=""
+                                {{if not .Githubuser }}
+                                    disabled
+                                {{end}}
+                      ></textarea>
+                            </div>
+                            <div class="gitment-editor-preview-field gitment-hidden">
+                                <div class="gitment-editor-preview gitment-markdown">空空如也</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="gitment-editor-footer">
+                        <a class="gitment-editor-footer-tip" href="https://guides.github.com/features/mastering-markdown/" target="_blank">
+                            支持 Markdown 语法
+                        </a>
+                        <button class="gitment-editor-submit" title="">评论</button>
+                    </div>
                 </div>
 
             {{end}}
-            <div class="gitment-container gitment-editor-container">
-                <a class="gitment-editor-avatar" href="{{ if .Githubuser }}gituser.NickName{{else}}'/oauth2/auth/post/{{.Post.ID}}'{{end}}">
-                    {{ if .Githubuser }}
-                        <img class="gitment-editor-avatar-img" src="{{.Githubuser.Picture}}">
-                    {{ else }}
-                        <svg class="gitment-github-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 50 50"><path d="M25 10c-8.3 0-15 6.7-15 15 0 6.6 4.3 12.2 10.3 14.2.8.1 1-.3 1-.7v-2.6c-4.2.9-5.1-2-5.1-2-.7-1.7-1.7-2.2-1.7-2.2-1.4-.9.1-.9.1-.9 1.5.1 2.3 1.5 2.3 1.5 1.3 2.3 3.5 1.6 4.4 1.2.1-1 .5-1.6 1-2-3.3-.4-6.8-1.7-6.8-7.4 0-1.6.6-3 1.5-4-.2-.4-.7-1.9.1-4 0 0 1.3-.4 4.1 1.5 1.2-.3 2.5-.5 3.8-.5 1.3 0 2.6.2 3.8.5 2.9-1.9 4.1-1.5 4.1-1.5.8 2.1.3 3.6.1 4 1 1 1.5 2.4 1.5 4 0 5.8-3.5 7-6.8 7.4.5.5 1 1.4 1 2.8v4.1c0 .4.3.9 1 .7 6-2 10.2-7.6 10.2-14.2C40 16.7 33.3 10 25 10z"></path></svg>
-                    {{ end }}
-                </a>
-
-                <div class="gitment-editor-main">
-                    <div class="gitment-editor-header">
-                        <nav class="gitment-editor-tabs">
-                            <button class="gitment-editor-tab write gitment-selected">输入</button>
-                            <button class="gitment-editor-tab preview">预览</button>
-                        </nav>
-                        <div class="gitment-editor-login">
-                            {{ if not .Githubuser }}
-                                <a class="gitment-editor-login-link" href="/oauth2/auth/post/{{ .Post.ID }}">Login</a>
-                            {{else }}
-                                <a class="gitment-editor-logout-link">{{.Githubuser.NickName}}</a>
-                            {{end}}
-                        </div>
-                    </div>
-                    <div class="gitment-editor-body">
-                        <div class="gitment-editor-write-field">
-                  <textarea placeholder="评价一下吧" title=""
-                            {{if not .Githubuser }}
-                                disabled
-                            {{end}}
-                  ></textarea>
-                        </div>
-                        <div class="gitment-editor-preview-field gitment-hidden">
-                            <div class="gitment-editor-preview gitment-markdown">空空如也</div>
-                        </div>
-                    </div>
-                </div>
-                <div class="gitment-editor-footer">
-                    <a class="gitment-editor-footer-tip" href="https://guides.github.com/features/mastering-markdown/" target="_blank">
-                        支持 Markdown 语法
-                    </a>
-                    <button class="gitment-editor-submit" title="">评论</button>
-                </div>
-            </div>
-
-{{/*            {{ template "front/comment" . }}*/}}
-
-            <div class="copyright">
-                <span>本作品采用</span>
-                <a href="https://creativecommons.org/licenses/by/4.0/">知识共享署名 4.0 国际许可协议</a>
-                <span>进行许可。 转载时请注明原文链接。</span>
-            </div>
         </div>
 
     </div>
 
     {{template "front/footer.html"}}
     <script src="/static/dist/comment.js"></script>
+    <script src="/static/dist/social-sharer.js"></script>
 </body>
 </html>
 {{end}}

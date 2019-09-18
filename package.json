@@ -23,6 +23,7 @@
         "highlight.js": "^9.15.10",
         "jquery": "^3.4.1",
         "marked": "^0.7.0",
+        "qrcode": "^1.4.1",
         "select2": "^4.0.10",
         "uikit": "^3.2.0",
         "url-loader": "^2.1.0"

@@ -1,6 +1,7 @@
 package controllers
 
 import (
+	"fmt"
 	"github.com/gin-gonic/gin"
 	"lyanna/models"
 	"net/http"
@@ -27,12 +28,17 @@ func Index(c *gin.Context) {
 func Archives(c *gin.Context) {
 	var ArchiveResult = make(map[string][]*models.Post )
 	allArchives, _ := models.ListPostArchives()
+	fmt.Println(allArchives)
+	var year []string
 	for _, v := range allArchives {
 		posts := models.ListPostByArchive(v.Year)
 		ArchiveResult[v.Year] = posts
+		year = append(year,v.Year)
 	}
+	fmt.Println(year)
 	c.HTML(http.StatusOK,"front/archives.html", gin.H{
 		"ArchiveResult":ArchiveResult,
+		"year":year,
 	})
 }
 

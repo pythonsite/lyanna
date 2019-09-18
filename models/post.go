@@ -142,6 +142,8 @@ func ListPostArchives()([]*Archive, error) {
 		archive.ArchiveDate, _ =  time.Parse("2006", archive.Year)
 		archives = append(archives, &archive)
 	}
+	fmt.Println(123)
+	fmt.Printf("%#v",archives)
 	return archives, nil
 }
 

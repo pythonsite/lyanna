@@ -90,6 +90,7 @@ func setTemplate(engine *gin.Engine) {
 		"dateFormat": utils.DateFormat,
 		"genList":utils.GenList,
 		"add": utils.Add,
+		"GetMapValue":utils.GetMapValue,
 	}
 	engine.SetFuncMap(funcMap)
 	engine.LoadHTMLGlob(filepath.Join(getCurrentDirectory(), "./views/**/*"))

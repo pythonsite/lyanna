@@ -83,3 +83,7 @@ func RenderSingleCommnet(comment *models.Comment)(string,error){
 	commentHTML = buf.String()
 	return commentHTML,nil
 }
+
+func GetMapValue(key string, origin map[string][]*models.Post)[]*models.Post{
+	return origin[key]
+}

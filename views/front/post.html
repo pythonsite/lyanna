@@ -10,10 +10,25 @@
     <link rel="stylesheet" href="/static/css/main.css">
     <link rel="stylesheet" href="/static/css/gitment.css">
     <link rel="stylesheet" href="/static/css/social-sharer.min.css">
+    <link rel="stylesheet" href="/static/css/markdown.css">
+    <!-- markdown parse -->
+    <script src="https://cdn.jsdelivr.net/npm/markdown-it@8.3.1/dist/markdown-it.js"></script>
+    <script src="https://cdn.bootcss.com/jquery/3.4.1/jquery.js"></script>
     <!-- code syntax highlighting -->
     <script src="https://cdn.jsdelivr.net/highlight.js/latest/highlight.min.js"></script>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/highlight.js/latest/styles/github.min.css" />
-
+    <script>hljs.initHighlightingOnLoad();</script>
+    <script type="text/javascript">
+        $(document).ready(function(){
+            $("h2,h3").each(function(i,item){
+                var tag = $(item).get(0).localName;
+                $(item).attr("id","wow"+i);
+                $(".toc-article").append('<a class="new'+tag+'" href="#wow'+i+'">'+$(this).text()+'</a></br>');
+                $(".newh2").css("margin-left",0);
+                $(".newh3").css("margin-left",20);
+            });
+        });
+    </script>
 </head>
 <body>
     {{template "front/menu.html"}}
@@ -43,13 +58,20 @@
                     </header>
 
                     {{ if ne .Post.Slug "aboutme"}}
-                        <div class="post-content">
+                        <div class="post-content" id="body">
                             {{ .contentHtml }}
                         </div>
                     {{end}}
 
                 </article>
-                <div class="toc-container"></div>
+                <div class="toc-container" id="toc-container">
+                    <div id="toc" class="toc-article">
+                        <strong class="toc-title">目录</strong>
+                        <div style="max-height: calc(100vh - 120px); overflow: hidden; overflow-y: auto;">
+                            <nav class="nav flex-column" id="post-toc"></nav>
+                        </div>
+                    </div>
+                </div>
             </div>
             <div class="copyright">
                 <span>本作品采用</span>
@@ -131,13 +153,13 @@
                         <button class="gitment-editor-submit" title="">评论</button>
                     </div>
                 </div>
-
             {{end}}
         </div>
 
     </div>
 
     {{template "front/footer.html"}}
+
     <script src="/static/dist/comment.js"></script>
     <script src="/static/dist/social-sharer.js"></script>
 </body>

@@ -89,7 +89,7 @@ func Comments(c *gin.Context) {
 func CommentMarkdown(c *gin.Context) {
 	commentContent := c.Request.PostFormValue("text")
 	policy := bluemonday.UGCPolicy()
-	unsafe := blackfriday.Run([]byte(commentContent))
+	unsafe := blackfriday.MarkdownCommon([]byte(commentContent))
 	commentHtml:= template.HTML(string(policy.SanitizeBytes(unsafe)))
 	c.JSON(http.StatusOK, gin.H{
 		"r":0,

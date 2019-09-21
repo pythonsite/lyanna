@@ -75,7 +75,7 @@ func AboutMe(c *gin.Context) {
 	content := models.GetContent(int(post.ID))
 	gitHubUser, _ := c.Get(models.CONTEXT_USER_KEY)
 	policy := bluemonday.UGCPolicy()
-	unsafe := blackfriday.Run([]byte(content))
+	unsafe := blackfriday.MarkdownCommon([]byte(content))
 	contentHtml:=template.HTML(string(policy.SanitizeBytes(unsafe)))
 	c.HTML(http.StatusOK,"front/post.html",gin.H{
 		"Post":post,

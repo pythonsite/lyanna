@@ -35,7 +35,7 @@ func (comment *Comment) GitUser() *GitHubUser{
 
 func (comment *Comment) CommentHTML(content string) template.HTML {
 	policy := bluemonday.UGCPolicy()
-	unsafe := blackfriday.Run([]byte(content))
+	unsafe := blackfriday.MarkdownCommon([]byte(content))
 	contentHtml:=template.HTML(string(policy.SanitizeBytes(unsafe)))
 	return contentHtml
 }

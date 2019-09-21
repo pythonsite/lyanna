@@ -40,7 +40,7 @@ func (post *Post) GetUserName(userID int)string {
 func (post *Post) Excerpt() template.HTML {
 	content :=GetContent(int(post.ID))
 	policy := bluemonday.StrictPolicy() //remove all html tags
-	sanitized := policy.Sanitize(string(blackfriday.Run([]byte(content))))
+	sanitized := policy.Sanitize(string(blackfriday.MarkdownCommon([]byte(content))))
 	runes := []rune(sanitized)
 	if len(runes) > 300 {
 		sanitized = string(runes[:300])

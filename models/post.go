@@ -24,6 +24,20 @@ type Post struct {
 	Tags []*Tag `gorm:"-"`
 }
 
+func (post *Post) Url() string{
+	url := fmt.Sprintf("/post/%d",post.ID)
+	fmt.Println(url)
+	return url
+}
+
+func (post *Post) GetTagsArray()[]string {
+	var tags []string
+	for _, tag := range post.Tags {
+		tags = append(tags, tag.Name)
+	}
+	return tags
+}
+
 func(post *Post) Insert() error {
 	return 	DB.Create(post).Error
 }

@@ -84,3 +84,32 @@ func AboutMe(c *gin.Context) {
 	})
 
 }
+
+func GetSearch(c *gin.Context) {
+	c.HTML(http.StatusOK,"front/search.html",nil)
+}
+
+func PostSearch(c *gin.Context)  {
+	var (
+		posts []*models.Post
+		err error
+	)
+	posts , err = models.ListPublishedPost("")
+	if err != nil {
+		c.AbortWithStatus(http.StatusInternalServerError)
+		return
+	}
+	var Posts = make(map[string]interface{},20)
+	var ret []map[string]interface{}
+	for _, post := range posts {
+		post.Tags,_ = models.ListTagByPostID(post.ID)
+		Posts["url"] = post.Url()
+		Posts["tags"] = post.GetTagsArray()
+		Posts["title"] = post.Title
+		Posts["content"] = models.GetContent(int(post.ID))
+		ret = append(ret,Posts)
+	}
+
+	c.JSON(http.StatusOK,ret)
+
+}

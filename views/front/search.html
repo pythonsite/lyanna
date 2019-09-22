@@ -1,0 +1,38 @@
+{{define "front/search.html"}}
+    <!DOCTYPE html>
+    <html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <title>Fan's Blog</title>
+        {{template "front/head.html"}}
+    </head>
+    <body>
+    {{template "front/menu.html"}}
+    <div class="container" id="content-outer">
+        <div class="inner" id="content-inner">
+            <article class="post page" id="page">
+                <header class="post-header text-center">
+                </header>
+                <div class="post-content">
+                    <div class="search-content">
+                        <form class="pure-form" _lpchecked="1">
+                            <input type="text" id="local-search-input" name="q" results="0" autocomplete="off" placeholder="搜索" class="pure-input pure-input-1">
+                        </form>
+                        <div id="local-search-result">
+                            <ul class="search-result-list">
+{{/*                                    % for post in []:*/}}
+{{/*                                {{ range $k,$v := .ret }}*/}}
+{{/*                                    <li><a href="{{$v.url}}" class="search-result-title">{{ $v.title }}</a><p class="search-result">${ post.excerpt }</p></li>*/}}
+{{/*                                {{end}}*/}}
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </article>
+        </div>
+    </div>
+    <script src="/static/dist/search.js"></script>
+    {{template "front/footer.html"}}
+    </body>
+    </html>
+{{end}}

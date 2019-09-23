@@ -27,10 +27,16 @@ func Index(c *gin.Context) {
 	}
 	pagination := utils.Pagination{
 		CurrentPage:1,
-		PerPage:6,
+		PerPage:models.Conf.General.PerPage,
 		Total:len(posts),
 	}
-	perPosts := posts[:6]
+	var perPosts []*models.Post
+	if models.Conf.General.PerPage > len(posts) {
+		perPosts = posts
+	} else {
+		perPosts = posts[:models.Conf.General.PerPage]
+	}
+
 	c.HTML(http.StatusOK, "front/index.html",gin.H{
 		"posts":perPosts,
 		"pagination":&pagination,
@@ -141,11 +147,17 @@ func PostPage(c *gin.Context) {
 	}
 	pagination := utils.Pagination{
 		CurrentPage:int(pageInt),
-		PerPage:6,
+		PerPage:models.Conf.General.PerPage,
 		Total:len(posts),
 	}
-	start := (int(pageInt) -1) * 6
-	perPosts := posts[start:start+6]
+	start := (int(pageInt) -1) * models.Conf.General.PerPage
+	var end int
+	if start+models.Conf.General.PerPage > len(posts) {
+		end = len(posts)
+	} else {
+		end = start+models.Conf.General.PerPage
+	}
+	perPosts := posts[start:end]
 	c.HTML(http.StatusOK, "front/index.html",gin.H{
 		"posts":perPosts,
 		"pagination":&pagination,

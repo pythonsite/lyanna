@@ -31,6 +31,7 @@ type Config struct {
 		RedisUrl string
 		SessionSecret string
 		LogOutEnabled bool
+		PerPage int
 	}
 	GitHub struct{
 		ClientID string

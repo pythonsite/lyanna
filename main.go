@@ -69,7 +69,7 @@ func main() {
 	router.GET("/pages/:page",controllers.PostPage)
 
 	router.GET("/admin/posts/page/:page", controllers.AdminPostPage)
-
+	router.GET("/admin/users/page/:page", controllers.AdminUserPage)
 	//admin := router.Group("/admin")
 	//{
 	//

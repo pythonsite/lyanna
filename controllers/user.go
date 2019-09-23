@@ -46,10 +46,48 @@ func UserLogin(c *gin.Context) {
 func UserList(c *gin.Context) {
 	users, _ := models.ListUsers()
 	user, _ := c.Get(models.CONTEXT_USER_KEY)
+	pagination := utils.Pagination{
+		CurrentPage:1,
+		PerPage:models.Conf.General.PerPage,
+		Total:len(users),
+	}
+	var perUsers []*models.User
+	if models.Conf.General.PerPage > len(users) {
+		perUsers = users
+	} else {
+		perUsers = users[:models.Conf.General.PerPage]
+	}
 	c.HTML(http.StatusOK, "admin/list_user.html",gin.H{
-		"users": users,
+		"users": perUsers,
 		"user": user,
 		"user_count":len(users),
+		"pagination":&pagination,
+	})
+}
+
+func AdminUserPage(c *gin.Context) {
+	page := c.Param("page")
+	pageInt, _ := strconv.ParseInt(page,10,32)
+	users, _ := models.ListUsers()
+	user, _ := c.Get(models.CONTEXT_USER_KEY)
+	pagination := utils.Pagination{
+		CurrentPage:int(pageInt),
+		PerPage:models.Conf.General.PerPage,
+		Total:len(users),
+	}
+	start := (int(pageInt) -1) * models.Conf.General.PerPage
+	var end int
+	if start+models.Conf.General.PerPage > len(users) {
+		end = len(users)
+	} else {
+		end = start+models.Conf.General.PerPage
+	}
+	perUsers := users[start:end]
+	c.HTML(http.StatusOK, "admin/list_user.html",gin.H{
+		"users": perUsers,
+		"user": user,
+		"user_count":len(users),
+		"pagination":&pagination,
 	})
 }
 

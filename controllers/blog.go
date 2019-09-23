@@ -99,15 +99,16 @@ func PostSearch(c *gin.Context)  {
 		c.AbortWithStatus(http.StatusInternalServerError)
 		return
 	}
-	var Posts = make(map[string]interface{},20)
 	var ret []map[string]interface{}
 	for _, post := range posts {
+		var Posts = make(map[string]interface{},1)
 		post.Tags,_ = models.ListTagByPostID(post.ID)
 		Posts["url"] = post.Url()
 		Posts["tags"] = post.GetTagsArray()
 		Posts["title"] = post.Title
 		Posts["content"] = models.GetContent(int(post.ID))
 		ret = append(ret,Posts)
+
 	}
 
 	c.JSON(http.StatusOK,ret)

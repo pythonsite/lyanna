@@ -20,10 +20,9 @@
                         </form>
                         <div id="local-search-result">
                             <ul class="search-result-list">
-{{/*                                    % for post in []:*/}}
-{{/*                                {{ range $k,$v := .ret }}*/}}
-{{/*                                    <li><a href="{{$v.url}}" class="search-result-title">{{ $v.title }}</a><p class="search-result">${ post.excerpt }</p></li>*/}}
-{{/*                                {{end}}*/}}
+                                {{ range $k,$v := .ret }}
+                                    <li><a href="{{$v.url}}" class="search-result-title">{{ $v.title }}</a><p class="search-result">{{$v.Excerpt}}</p></li>
+                                {{end}}
                             </ul>
                         </div>
                     </div>

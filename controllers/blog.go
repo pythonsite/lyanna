@@ -27,10 +27,10 @@ func Index(c *gin.Context) {
 	}
 	pagination := utils.Pagination{
 		CurrentPage:1,
-		PerPage:2,
+		PerPage:6,
 		Total:len(posts),
 	}
-	perPosts := posts[:2]
+	perPosts := posts[:6]
 	c.HTML(http.StatusOK, "front/index.html",gin.H{
 		"posts":perPosts,
 		"pagination":&pagination,
@@ -141,11 +141,11 @@ func PostPage(c *gin.Context) {
 	}
 	pagination := utils.Pagination{
 		CurrentPage:int(pageInt),
-		PerPage:2,
+		PerPage:6,
 		Total:len(posts),
 	}
-	start := (int(pageInt) -1) * 2
-	perPosts := posts[start:start+2]
+	start := (int(pageInt) -1) * 6
+	perPosts := posts[start:start+6]
 	c.HTML(http.StatusOK, "front/index.html",gin.H{
 		"posts":perPosts,
 		"pagination":&pagination,

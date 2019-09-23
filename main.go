@@ -68,6 +68,8 @@ func main() {
 	router.GET("/json/search", controllers.PostSearch)
 	router.GET("/pages/:page",controllers.PostPage)
 
+	router.GET("/admin/posts/page/:page", controllers.AdminPostPage)
+
 	//admin := router.Group("/admin")
 	//{
 	//

@@ -73,6 +73,31 @@
                 {{end}}
                 </tbody>
             </table>
+            <ul class="uk-pagination uk-flex-center">
+                {{ if .pagination.HasPrev }}
+                <li><a href="/admin/posts/page/{{.pagination.PrevNum}}"><span uk-pagination-previous></span></a></li>
+                {{end}}
+                {{$Pagination := .pagination}}
+                {{$PageRet := $Pagination.PageRet }}
+                {{$CurrentPage := $Pagination.CurrentPage }}
+                {{ range $k,$v := $PageRet}}
+                    {{ if ne $v -1 }}
+                        {{ if eq $v  $CurrentPage }}
+                            <li class="uk-active"><span>{{$v}}</span></li>
+                        {{else}}
+                            <li><a href="/admin/posts/page/{{$v}}">{{$v}}</a></li>
+                        {{end}}
+                    {{else}}
+                        <li class="uk-disabled"><span>...</span></li>
+                    {{end}}
+                {{end}}
+
+                {{ if $Pagination.HasNext }}
+                    {{$NextNum := $Pagination.NextNum }}
+                    <li><a href="/admin/posts/page/{{$NextNum}}"><span uk-pagination-next></span></a></li>
+                {{end}}
+            </ul>
+
         </div>
     </div>
 

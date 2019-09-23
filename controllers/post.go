@@ -1,7 +1,6 @@
 package controllers
 
 import (
-	"fmt"
 	"github.com/gin-gonic/gin"
 	"github.com/microcosm-cc/bluemonday"
 	"github.com/russross/blackfriday"
@@ -40,9 +39,49 @@ func PostIndex(c *gin.Context) {
 		tags, _:= models.ListTagByPostID(post.ID)
 		post.Tags = tags
 	}
+	pagination := utils.Pagination{
+		CurrentPage:1,
+		PerPage:models.Conf.General.PerPage,
+		Total:len(posts),
+	}
+	var perPosts []*models.Post
+	if models.Conf.General.PerPage > len(posts) {
+		perPosts = posts
+	} else {
+		perPosts = posts[:models.Conf.General.PerPage]
+	}
 	c.HTML(http.StatusOK, "admin/list_post.html", gin.H{
-		"posts": posts,
+		"posts": perPosts,
 		"post_count": len(posts),
+		"pagination":&pagination,
+	})
+}
+
+func AdminPostPage(c *gin.Context) {
+	page := c.Param("page")
+	pageInt, _ := strconv.ParseInt(page,10,32)
+	posts, _ := models.ListPosts()
+	for _, post := range posts {
+		tags, _:= models.ListTagByPostID(post.ID)
+		post.Tags = tags
+	}
+	pagination := utils.Pagination{
+		CurrentPage:int(pageInt),
+		PerPage:models.Conf.General.PerPage,
+		Total:len(posts),
+	}
+	start := (int(pageInt) -1) * models.Conf.General.PerPage
+	var end int
+	if start+models.Conf.General.PerPage > len(posts) {
+		end = len(posts)
+	} else {
+		end = start+models.Conf.General.PerPage
+	}
+	perPosts := posts[start:end]
+	c.HTML(http.StatusOK, "admin/list_post.html", gin.H{
+		"posts": perPosts,
+		"post_count": len(posts),
+		"pagination":&pagination,
 	})
 }
 
@@ -51,7 +90,6 @@ func GetEditPost(c *gin.Context) {
 	postID, _ := strconv.ParseUint(id,10,64)
 	post, _ := models.GetPostByID(postID)
 	tags ,_ := models.ListTagByPostID(post.ID)
-	fmt.Println(tags)
 	allTags, _ := models.ListALlTags()
 	users, _:= models.ListUsers()
 	post.Tags = tags

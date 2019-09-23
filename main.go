@@ -70,6 +70,8 @@ func main() {
 
 	router.GET("/admin/posts/page/:page", controllers.AdminPostPage)
 	router.GET("/admin/users/page/:page", controllers.AdminUserPage)
+	router.GET("/admin/post/preview/:id", controllers.PreviewGetPost)
+
 	//admin := router.Group("/admin")
 	//{
 	//

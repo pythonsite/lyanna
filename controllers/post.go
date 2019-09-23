@@ -190,10 +190,31 @@ func UpdatePost(c *gin.Context) {
 	})
 }
 
-func GetPost(c *gin.Context) {
+func PreviewGetPost(c *gin.Context) {
+	getPost(c, false)
+}
+
+func GetPost(c *gin.Context){
+	getPost(c, true)
+}
+
+func getPost(c *gin.Context, isPublish bool) {
 	id := c.Param("id")
 	postID, _ := strconv.ParseUint(id,10,64)
-	post, _ := models.GetPostByID(postID)
+	var (
+		post *models.Post
+		err error
+	)
+	if isPublish {
+		post,err = models.GetPostByIDAndPublished(postID,isPublish)
+	} else {
+		post,err = models.GetPostByID(postID)
+	}
+
+	if err != nil {
+		c.AbortWithError(http.StatusNotFound,err)
+		return
+	}
 	tags ,_ := models.ListTagByPostID(post.ID)
 	post.Tags = tags
 	content := models.GetContent(int(postID))

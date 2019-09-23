@@ -75,6 +75,12 @@ func GetPostByID(postID interface{})(*Post,error) {
 	return &post,err
 }
 
+func GetPostByIDAndPublished(postID interface{},published bool)(*Post,error) {
+	var post Post
+	err := DB.First(&post,"id=? and published=?",postID, published).Error
+	return &post,err
+}
+
 func GetPostBySlug(slug string)(*Post,error) {
 	var post Post
 	err := DB.First(&post,"slug=?",slug).Error

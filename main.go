@@ -66,6 +66,7 @@ func main() {
 	router.GET("/page/:aboutme",controllers.AboutMe)
 	router.GET("/search",controllers.GetSearch)
 	router.GET("/json/search", controllers.PostSearch)
+	router.GET("/pages/:page",controllers.PostPage)
 
 	//admin := router.Group("/admin")
 	//{

@@ -7,7 +7,9 @@ import (
 	"github.com/russross/blackfriday"
 	"html/template"
 	"lyanna/models"
+	"lyanna/utils"
 	"net/http"
+	"strconv"
 )
 
 func Index(c *gin.Context) {
@@ -23,8 +25,15 @@ func Index(c *gin.Context) {
 	for _, post := range posts {
 		post.Tags,_ = models.ListTagByPostID(post.ID)
 	}
+	pagination := utils.Pagination{
+		CurrentPage:1,
+		PerPage:2,
+		Total:len(posts),
+	}
+	perPosts := posts[:2]
 	c.HTML(http.StatusOK, "front/index.html",gin.H{
-		"posts":posts,
+		"posts":perPosts,
+		"pagination":&pagination,
 	})
 }
 
@@ -113,4 +122,32 @@ func PostSearch(c *gin.Context)  {
 
 	c.JSON(http.StatusOK,ret)
 
+}
+
+func PostPage(c *gin.Context) {
+	var (
+		posts []*models.Post
+		err error
+	)
+	page := c.Param("page")
+	pageInt, _ := strconv.ParseInt(page,10,32)
+	posts , err = models.ListPublishedPost("")
+	if err != nil {
+		c.AbortWithStatus(http.StatusInternalServerError)
+		return
+	}
+	for _, post := range posts {
+		post.Tags,_ = models.ListTagByPostID(post.ID)
+	}
+	pagination := utils.Pagination{
+		CurrentPage:int(pageInt),
+		PerPage:2,
+		Total:len(posts),
+	}
+	start := (int(pageInt) -1) * 2
+	perPosts := posts[start:start+2]
+	c.HTML(http.StatusOK, "front/index.html",gin.H{
+		"posts":perPosts,
+		"pagination":&pagination,
+	})
 }

@@ -9,8 +9,6 @@
 <body>
 
     {{template "front/menu.html"}}
-
-
     <div class="container" id="content-outer">
         <div class="inner" id="content-inner">
             <div class="recent-posts">
@@ -38,6 +36,31 @@
                 {{end}}
             </div>
         </div>
+        <nav class="page-nav text-center">
+            <div>{{.pagination.HasPrev}}</div>
+            {{ if .pagination.HasPrev }}
+            <a class="extend prev" rel="prev" href="/pages/{{.pagination.PrevNum}}">〈</a>
+            {{end}}
+            {{$Pagination := .pagination}}
+            {{$PageRet := $Pagination.PageRet }}
+            {{$CurrentPage := $Pagination.CurrentPage }}
+            {{ range $k,$v := $PageRet}}
+                {{ if ne $v -1 }}
+                    {{ if eq $v  $CurrentPage }}
+                        <span class="page-number current">{{$v}}</span>
+                    {{else}}
+                        <a class="page-number" href="/pages/{{$v}}">{{$v}}</a>
+                    {{end}}
+                {{else}}
+                    <span class=ellipsis>…</span>
+                {{end}}
+            {{end}}
+            {{ if $Pagination.HasNext }}
+                {{$NextNum := $Pagination.NextNum }}
+                <a class="extend next" rel="next" href="/pages/{{$NextNum}}">〉</a>
+            {{end}}
+        </nav>
+
 
     </div>
     {{template "front/footer.html"}}

@@ -87,7 +87,7 @@ func AboutMe(c *gin.Context) {
 	fmt.Println(post)
 	tags ,_ := models.ListTagByPostID(post.ID)
 	post.Tags = tags
-	content := models.GetContent(int(post.ID))
+	content := post.Content
 	gitHubUser, _ := c.Get(models.CONTEXT_USER_KEY)
 	policy := bluemonday.UGCPolicy()
 	unsafe := blackfriday.MarkdownCommon([]byte(content))

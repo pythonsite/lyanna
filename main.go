@@ -38,8 +38,7 @@ func main() {
 	router.POST("/admin/login",controllers.UserLogin)
 	router.POST("/api/publish/:id", controllers.PostPublish)
 	router.DELETE("/api/publish/:id",controllers.DeletePublish)
-	router.POST("/comment/post/:id", controllers.CreateComment)
-	router.POST("/comment/markdown",controllers.CommentMarkdown)
+
 	router.GET("/comments/post/:id",controllers.Comments)
 	router.GET("/rss",controllers.GetRss)
 	router.GET("/page/:aboutme",controllers.AboutMe)
@@ -69,6 +68,13 @@ func main() {
 		admin.POST("/user/edit/:id",controllers.PostUserEdit)
 		admin.GET("/user/new",controllers.GetCreateUser)
 		admin.POST("/user/new", controllers.PostCreateUser)
+	}
+
+	auth := router.Group("/comment")
+	auth.Use(AuthRequired())
+	{
+		auth.POST("/post/:id", controllers.CreateComment)
+		auth.POST("/markdown",controllers.CommentMarkdown)
 	}
 
 	err := router.Run(models.Conf.General.Addr)
@@ -137,3 +143,16 @@ func AdminRequired() gin.HandlerFunc {
 	}
 }
 
+func AuthRequired() gin.HandlerFunc {
+	return func(c *gin.Context) {
+		if user,_ := c.Get(models.CONTEXT_GIT_USER_KEY);user != nil {
+			if _, ok := user.(*models.GitHubUser);ok {
+				c.Next()
+				return
+			}
+		}
+		c.HTML(http.StatusForbidden,"errors/error.html",gin.H{
+			"message":"Forbidden!",
+		})
+	}
+}

@@ -60,8 +60,8 @@ node_modules/
 yarn.lock
 
 # config
-.yaml
-.yml
+*.yaml
+*.yml
 
 .dea
 

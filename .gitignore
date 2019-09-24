@@ -58,3 +58,8 @@ Pipfile
 Pipfile.lock
 node_modules/
 yarn.lock
+
+# config
+.yaml
+.yml
+

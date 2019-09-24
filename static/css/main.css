@@ -383,33 +383,36 @@ body {
   color: #999;
 }
 .page-nav {
-  margin: 10px 0 0;
-  padding: 10px 0 10px;
+    margin: 10px 0 0;
+    padding: 10px 0 10px;
 }
 .page-nav .page-number {
-  font-size: 14px;
-  display: inline-block;
-  position: relative;
-  margin: 0 5px;
-  width: 28px;
-  height: 28px;
-  line-height: 28px;
+    font-size: 14px;
+    display: inline-block;
+    position: relative;
+    margin: 0 5px;
+    width: 28px;
+    height: 28px;
+    line-height: 28px;
 }
 .page-nav .page-number.current {
-  color: #fff;
-  background: #ccc;
-  border-radius: 14px;
+    color: #fff;
+    background: #ccc;
+    border-radius: 14px;
 }
 .page-nav .page-number.current:hover {
-  color: #fff;
+    color: #fff;
+}
+.page-nav .page-number{
+    border: 1px solid #fff;
 }
 .page-nav .page-number:hover {
-  color: #2196F3;
-  border-radius: 14px;
-  border: 1px dashed #efefef;
+    color: #2196F3;
+    border-radius: 14px;
+    border: 1px solid #efefef;
 }
 .page-nav a:hover {
-  color: #2196F3;
+    color: #2196F3;
 }
 .post-container {
   display: -ms-flexbox;

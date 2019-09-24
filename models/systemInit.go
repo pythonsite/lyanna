@@ -52,7 +52,7 @@ func InitDB()(err error) {
 		log.Println("connect db success")
 		DB = db
 		//DB.LogMode(true)
-		DB.AutoMigrate(&Comment{}, &Post{},&PostTag{}, ReactItem{},Tag{},User{}, GitHubUser{})
+		DB.AutoMigrate(&Comment{}, &Post{},&PostTag{}, &ReactItem{}, &Tag{}, &User{}, &GitHubUser{})
 	}
 	return
 }

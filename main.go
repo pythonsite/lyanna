@@ -9,6 +9,7 @@ import (
 	"lyanna/controllers"
 	"lyanna/models"
 	"lyanna/utils"
+	"net/http"
 	"os"
 	"path/filepath"
 	"strings"
@@ -20,8 +21,6 @@ func main() {
 	setTemplate(router)
 	setSessions(router)
 	router.Use(ShareData())
-
-
 	router.Static("/static", filepath.Join(getCurrentDirectory(), "./static"))
 
 	router.GET("/", controllers.Index)
@@ -35,30 +34,10 @@ func main() {
 	router.GET("/oauth2/auth",controllers.AuthGet)
 	router.GET("/oauth2",controllers.Oauth2Callback)
 	router.GET("/oauth2/auth/post/:id", controllers.AuthGet)
-
 	router.GET("/admin/login",controllers.AdminLogin)
-
 	router.POST("/admin/login",controllers.UserLogin)
-
-	router.GET("/admin",controllers.AdminIndex)
-	router.GET("/admin/users",controllers.UserList)
-
-	router.GET("/admin/edit/:id",controllers.GetEditUser)
-	router.POST("/admin/edit/:id",controllers.PostUserEdit)
-
-	router.GET("/admin/user/new",controllers.GetCreateUser)
-	router.POST("/admin/user/new", controllers.PostCreateUser)
-
-
 	router.POST("/api/publish/:id", controllers.PostPublish)
 	router.DELETE("/api/publish/:id",controllers.DeletePublish)
-
-	router.GET("/admin/posts", controllers.PostIndex)
-	router.GET("/admin/post/edit/:id", controllers.GetEditPost)
-	router.POST("/admin/post/edit/:id",controllers.UpdatePost)
-	router.GET("/admin/post/new",controllers.GetNewPost)
-	router.POST("/admin/post/new", controllers.AddPost)
-
 	router.POST("/comment/post/:id", controllers.CreateComment)
 	router.POST("/comment/markdown",controllers.CommentMarkdown)
 	router.GET("/comments/post/:id",controllers.Comments)
@@ -68,15 +47,29 @@ func main() {
 	router.GET("/json/search", controllers.PostSearch)
 	router.GET("/pages/:page",controllers.PostPage)
 
-	router.GET("/admin/posts/page/:page", controllers.AdminPostPage)
-	router.GET("/admin/users/page/:page", controllers.AdminUserPage)
-	router.GET("/admin/post/preview/:id", controllers.PreviewGetPost)
+	admin := router.Group("/admin")
+	admin.Use(AdminRequired())
+	{
+		admin.GET("/posts", controllers.PostIndex)
 
-	//admin := router.Group("/admin")
-	//{
-	//
-	//}
+		admin.GET("/post/edit/:id", controllers.GetEditPost)
+		admin.POST("/post/edit/:id",controllers.UpdatePost)
 
+		admin.GET("/post/new",controllers.GetNewPost)
+		admin.POST("/post/new", controllers.AddPost)
+
+		admin.GET("/posts/page/:page", controllers.AdminPostPage)
+		admin.GET("/users/page/:page", controllers.AdminUserPage)
+
+		admin.GET("/post/preview/:id", controllers.PreviewGetPost)
+		admin.GET("/",controllers.AdminIndex)
+
+		admin.GET("/users",controllers.UserList)
+		admin.GET("/user/edit/:id",controllers.GetEditUser)
+		admin.POST("/user/edit/:id",controllers.PostUserEdit)
+		admin.GET("/user/new",controllers.GetCreateUser)
+		admin.POST("/user/new", controllers.PostCreateUser)
+	}
 
 	err := router.Run(models.Conf.General.Addr)
 	if err != nil {
@@ -119,13 +112,28 @@ func ShareData() gin.HandlerFunc {
 			}
 			gitUser, err := models.GetGitUserByGid(uID)
 			if err == nil {
-				c.Set(models.CONTEXT_USER_KEY, gitUser)
+				c.Set(models.CONTEXT_GIT_USER_KEY, gitUser)
 			}
 			if models.Conf.General.LogOutEnabled {
 				c.Set("LogOutEnabled", true)
 			}
 			c.Next()
 		}
+	}
+}
+
+func AdminRequired() gin.HandlerFunc {
+	return func(c *gin.Context) {
+		if user,_ := c.Get(models.CONTEXT_USER_KEY);user != nil {
+			if _, ok := user.(*models.User);ok {
+				c.Next()
+				return
+			}
+		}
+		c.HTML(http.StatusForbidden,"errors/error.html",gin.H{
+			"message":"Forbidden!",
+		})
+		c.Abort()
 	}
 }
 

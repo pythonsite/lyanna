@@ -15,5 +15,5 @@ func AdminIndex(c *gin.Context) {
 	if user == nil {
 		c.Redirect(http.StatusMovedPermanently,"/admin/login")
 	}
-	c.HTML(http.StatusOK, "admin/index.html",nil)
+	c.HTML(http.StatusOK, "admin/errors.html",nil)
 }

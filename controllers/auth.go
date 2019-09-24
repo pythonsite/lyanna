@@ -11,7 +11,6 @@ import (
 	"lyanna/models"
 	"lyanna/utils"
 	"net/http"
-	"strconv"
 	"strings"
 )
 
@@ -25,9 +24,9 @@ type GithubUserInfo struct {
 }
 
 func AuthGet(c *gin.Context) {
-	id := c.Param("id")
-	postID, _ := strconv.ParseUint(id,10,64)
-	fmt.Println(postID)
+	//id := c.Param("id")
+	//postID, _ := strconv.ParseUint(id,10,64)
+	//fmt.Println(postID)
 	uuid := utils.UUID()
 	session := sessions.Default(c)
 	session.Delete(models.SESSION_GITHUB_STATE)
@@ -43,8 +42,6 @@ func Oauth2Callback(c *gin.Context) {
 	refer := c.Request.Header.Get("referer")
 	referArray := strings.Split(refer,"/")
 	postID  := referArray[len(referArray)-1]
-	fmt.Println(123123)
-	fmt.Println(refer)
 	session := sessions.Default(c)
 	if len(state) == 0 || state != session.Get(models.SESSION_GITHUB_STATE) {
 		c.Abort()

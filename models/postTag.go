@@ -11,7 +11,7 @@ type PostTag struct {
 	TagID int64
 }
 
-//func (pt *PostTag) Insert() error {
+//func (pt *PostTag) Insert() errors {
 //	return DB.FirstOrCreate(pt, "post_id = ? and tag_id = ?", pt.PostId, pt.TagId).Error
 //}
 

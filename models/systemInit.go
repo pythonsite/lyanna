@@ -14,6 +14,7 @@ import (
 const (
 	SESSION_KEY = "UserID"
 	CONTEXT_USER_KEY = "User"
+	CONTEXT_GIT_USER_KEY = "GitUser"
 	SESSION_GITHUB_STATE = "GITHUB_STATE" // github state session key
 )
 

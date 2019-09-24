@@ -219,12 +219,10 @@ func getPost(c *gin.Context, isPublish bool) {
 	post.Tags = tags
 	content := models.GetContent(int(postID))
 	comments, _ := models.ListCommentsByPostID(int(postID))
-	gitHubUser, _ := c.Get(models.CONTEXT_USER_KEY)
+	gitHubUser, _ := c.Get(models.CONTEXT_GIT_USER_KEY)
 	policy := bluemonday.UGCPolicy()
 	render := blackfriday.HtmlRenderer(commonHtmlFlags,"","")
 	unsafe := blackfriday.Markdown([]byte(content),render,commonExtensions)
-	//unsafe := blackfriday.MarkdownCommon([]byte(content))
-	//unsafe := blackfriday.Run([]byte(content),blackfriday.WithNoExtensions())
 	contentHtml:=template.HTML(policy.Sanitize(string(unsafe)))
 
 	var pages int

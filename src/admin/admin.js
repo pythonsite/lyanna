@@ -1,6 +1,6 @@
 import UIkit from "./base"
 
-let $error = $('meta[name=error]').attr('content');
+let $error = $('meta[name=errors]').attr('content');
 
 if ($error) {
     UIkit.notification({

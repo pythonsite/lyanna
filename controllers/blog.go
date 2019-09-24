@@ -37,7 +37,7 @@ func Index(c *gin.Context) {
 		perPosts = posts[:models.Conf.General.PerPage]
 	}
 
-	c.HTML(http.StatusOK, "front/index.html",gin.H{
+	c.HTML(http.StatusOK, "front/errors.html",gin.H{
 		"posts":perPosts,
 		"pagination":&pagination,
 	})
@@ -158,7 +158,7 @@ func PostPage(c *gin.Context) {
 		end = start+models.Conf.General.PerPage
 	}
 	perPosts := posts[start:end]
-	c.HTML(http.StatusOK, "front/index.html",gin.H{
+	c.HTML(http.StatusOK, "front/errors.html",gin.H{
 		"posts":perPosts,
 		"pagination":&pagination,
 	})

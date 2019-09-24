@@ -1,0 +1,21 @@
+{{define "errors/error.html"}}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Fan's Blog</title>
+    {{template "front/head.html"}}
+</head>
+<body>
+
+    {{template "front/menu.html"}}
+    <div class="container" id="content-outer">
+        <div class="inner" id="content-inner">
+            <div>{{.message}}</div>
+        </div>
+    </div>
+    {{template "front/footer.html"}}
+
+</body>
+</html>
+{{end}}

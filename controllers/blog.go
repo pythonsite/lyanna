@@ -80,8 +80,9 @@ func AboutMe(c *gin.Context) {
 	fmt.Println(slug)
 	post,err := models.GetPostBySlug(slug)
 	if err != nil {
-
-		c.AbortWithStatus(http.StatusInternalServerError)
+		c.HTML(http.StatusNotFound,"errors/error.html",gin.H{
+			"message":"Not Found post!",
+		})
 		return
 	}
 	fmt.Println(post)

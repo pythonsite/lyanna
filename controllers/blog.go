@@ -121,13 +121,10 @@ func PostSearch(c *gin.Context)  {
 		Posts["url"] = post.Url()
 		Posts["tags"] = post.GetTagsArray()
 		Posts["title"] = post.Title
-		Posts["content"] = models.GetContent(int(post.ID))
+		Posts["content"] = post.Content
 		ret = append(ret,Posts)
-
 	}
-
 	c.JSON(http.StatusOK,ret)
-
 }
 
 func PostPage(c *gin.Context) {

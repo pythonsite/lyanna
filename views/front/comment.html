@@ -29,8 +29,8 @@
                                 </div>
                             {{end}}
                         </div>
-                        {{$Conent := $Comment.GetComment $Comment.ID}}
-                        <div class="gitment-comment-body gitment-markdown">{{ $Comment.CommentHTML $Conent  }}</div>
+{{/*                        {{$Conent := $Comment.GetComment $Comment.ID}}*/}}
+                        <div class="gitment-comment-body gitment-markdown">{{ $Comment.CommentHTML }}</div>
                     </div>
                 </li>
             {{end}}

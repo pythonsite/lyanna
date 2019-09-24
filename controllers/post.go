@@ -100,13 +100,11 @@ func GetEditPost(c *gin.Context) {
 	if post == nil {
 		c.Redirect(http.StatusMovedPermanently,"/admin/users")
 	}
-	content := models.GetContent(int(postID))
 	c.HTML(http.StatusOK, "admin/post.html",gin.H{
 		"post":post,
 		"users":users,
 		"allTags":allTags,
 		"postTags":postTags,
-		"content": content,
 	})
 }
 
@@ -134,11 +132,11 @@ func AddPost(c *gin.Context){
 		Slug:slug,
 		Summary:summary,
 		AuthorID:int(authorID),
+		Content:content,
 		CanComment:canComment,
 		Published:publish,
 	}
 	_ = models.PostCreatAndGetID(post)
-	models.SetContent(int(post.ID), content)
 	models.UpdateMultiTags([]string{}, tags, int(post.ID))
 	posts, _ := models.ListPosts()
 	for _, post := range posts {
@@ -169,12 +167,12 @@ func UpdatePost(c *gin.Context) {
 		Slug:slug,
 		Summary:summary,
 		AuthorID:int(authorID),
+		Content:content,
 		CanComment:canComment,
 		Published:publish,
 	}
 	post.ID = uint64(pID)
 	post.Update()
-	models.SetContent(int(pID), content)
 	originPostTags,_ := models.ListTagByPostID(post.ID)
 	originPostTagNames := models.GetTagNames(originPostTags)
 	models.UpdateMultiTags(originPostTagNames, tags, int(post.ID))
@@ -217,7 +215,7 @@ func getPost(c *gin.Context, isPublish bool) {
 	}
 	tags ,_ := models.ListTagByPostID(post.ID)
 	post.Tags = tags
-	content := models.GetContent(int(postID))
+	content := post.Content
 	comments, _ := models.ListCommentsByPostID(int(postID))
 	gitHubUser, _ := c.Get(models.CONTEXT_GIT_USER_KEY)
 	policy := bluemonday.UGCPolicy()

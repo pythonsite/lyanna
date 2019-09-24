@@ -56,7 +56,6 @@
                             </span>
                       </span>
                     </header>
-
                     {{ if ne .Post.Slug "aboutme"}}
                         <div class="post-content" id="body">
                             {{ .contentHtml }}
@@ -101,14 +100,12 @@
                             {{ range $k, $q := $PAGES }}
                                 <li class="gitment-comments-page-item {{ if not $q}}gitment-selected{{else}}''{{end}}">{{ add $q 1}}</li>
                             {{end}}
-
                             <li class="gitment-comments-page-item {{ if le .CommentNum 10 }}gitment-hidden{{else}}''{{end}} } next">Next</li>
                         </ul>
                         {{ if not .Comments}}
                             <div class="gitment-comments-empty">还没有评论</div>
                         {{end}}
                     </div>
-
                 {{end}}
                 <div class="gitment-container gitment-editor-container">
                     <a class="gitment-editor-avatar" href="{{ if .Githubuser }}gituser.NickName{{else}}'/oauth2/auth/post/{{.Post.ID}}'{{end}}">
@@ -135,11 +132,11 @@
                         </div>
                         <div class="gitment-editor-body">
                             <div class="gitment-editor-write-field">
-                      <textarea placeholder="评价一下吧" title=""
+                                <textarea placeholder="评价一下吧" title=""
                                 {{if not .Githubuser }}
                                     disabled
                                 {{end}}
-                      ></textarea>
+                                ></textarea>
                             </div>
                             <div class="gitment-editor-preview-field gitment-hidden">
                                 <div class="gitment-editor-preview gitment-markdown">空空如也</div>

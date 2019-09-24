@@ -42,7 +42,7 @@
                     <div class="uk-margin">
                         <label class="uk-form-label" for="">Content</label>
                         <div class="uk-form-controls">
-                            <textarea name="content" class="uk-textarea">{{if .post }}{{.Content}}{{end}}</textarea>
+                            <textarea name="content" class="uk-textarea">{{if .post }}{{ .post.Content }}{{end}}</textarea>
                         </div>
                     </div>
                     <div class="uk-margin">

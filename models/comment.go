@@ -1,7 +1,6 @@
 package models
 
 import (
-	"fmt"
 	"github.com/microcosm-cc/bluemonday"
 	"github.com/russross/blackfriday"
 	"html/template"
@@ -13,6 +12,7 @@ type Comment struct {
 	BaseModel
 	GitHubID int64
 	PostID int64
+	Content string `gorm:"type:longtext"`
 	RefID int64
 }
 
@@ -24,7 +24,6 @@ func (comment *Comment) Insert()error{
 func ListCommentsByPostID(postid int)([]*Comment, error){
 	var comments []*Comment
 	err := DB.Model(&Comment{}).Order("id desc").Find(&comments,"post_id=?",postid).Error
-	fmt.Println(comments)
 	return comments,err
 }
 
@@ -33,9 +32,9 @@ func (comment *Comment) GitUser() *GitHubUser{
 	return gitUser
 }
 
-func (comment *Comment) CommentHTML(content string) template.HTML {
+func (comment *Comment) CommentHTML() template.HTML {
 	policy := bluemonday.UGCPolicy()
-	unsafe := blackfriday.MarkdownCommon([]byte(content))
+	unsafe := blackfriday.MarkdownCommon([]byte(comment.Content))
 	contentHtml:=template.HTML(string(policy.SanitizeBytes(unsafe)))
 	return contentHtml
 }

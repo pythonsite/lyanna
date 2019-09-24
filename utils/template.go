@@ -60,7 +60,7 @@ func RenderAllComment(hh HH) (string,error) {
 	return AllCommentHTML,nil
 }
 
-func RenderSingleCommnet(comment *models.Comment)(string,error){
+func RenderSingleComment(comment *models.Comment)(string,error){
 	var (
 		commentHTML string
 		err error

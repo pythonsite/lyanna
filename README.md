@@ -25,7 +25,17 @@
 	
 ## 项目效果图
 
+![index](https://github.com/pythonsite/lyanna/blob/master/screenshot/index.png)
 
+![02](https://github.com/pythonsite/lyanna/blob/master/screenshot/02.png)
+
+![03](https://github.com/pythonsite/lyanna/blob/master/screenshot/03.png)
+
+![04](https://github.com/pythonsite/lyanna/blob/master/screenshot/04.png)
+
+![05](https://github.com/pythonsite/lyanna/blob/master/screenshot/05.png)
+
+![06](https://github.com/pythonsite/lyanna/blob/master/screenshot/06.png)
 
 
 

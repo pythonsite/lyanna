@@ -169,14 +169,13 @@ func ListPostArchives()([]*Archive, error) {
 		archive.ArchiveDate, _ =  time.Parse("2006", archive.Year)
 		archives = append(archives, &archive)
 	}
-	fmt.Println(123)
 	fmt.Printf("%#v",archives)
 	return archives, nil
 }
 
 func ListPostByArchive(year string)[]*Post {
-	condition := fmt.Sprintf("%s",year)
-	rows, _ := DB.Raw("select * from posts where date_format(created_at,'%Y')=? and published = ? order by created_at desc",condition,true).Rows()
+	//condition := fmt.Sprintf("%s",year)
+	rows, _ := DB.Raw("select * from posts where date_format(created_at,'%Y')=? and published = ? order by created_at desc",year,true).Rows()
 	defer rows.Close()
 	posts := make([]*Post,0)
 	for rows.Next() {

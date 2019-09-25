@@ -66,7 +66,7 @@ func (post *Post) Excerpt() template.HTML {
 
 func ListPosts()([]*Post, error) {
 	var posts []*Post
-	err := DB.Find(&posts).Error
+	err := DB.Order("id desc").Find(&posts).Error
 	return posts,err
 }
 

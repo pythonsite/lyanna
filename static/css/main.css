@@ -1248,7 +1248,7 @@ img {
   .post-container .toc-container .toc-article {
     display: block;
     position: fixed;
-    margin-left: 80px;
+    margin-left: -15px;
     width: 200px;
     top: 25%;
     z-index: 1;

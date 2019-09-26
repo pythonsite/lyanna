@@ -64,4 +64,5 @@ yarn.lock
 *.yml
 
 .dea
+nohup.out
 

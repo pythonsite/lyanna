@@ -9,13 +9,10 @@
     <body>
     {{template "front/menu.html"}}
     {{$AllArchive := .ArchiveResult}}
-{{/*    {{range $YEAR := .year }}*/}}
-{{/*        {{ GetMapValue $YEAR $ALL }}*/}}
-{{/*    {{end}}*/}}
     <div class="container" id="content-outer">
         <div class="inner" id="content-inner">
             <section class="post page archives">
-                {{ range $Year :=  .year}}
+                {{ range $Year := .years}}
                 <h3 class="archive-year-wrap">
                     <a href="/archives/{{$Year}}" class="archive-year">
                         {{$Year}}

@@ -46,27 +46,28 @@ func Index(c *gin.Context) {
 func Archives(c *gin.Context) {
 	var ArchiveResult = make(map[string][]*models.Post )
 	allArchives, _ := models.ListPostArchives()
-	fmt.Println(allArchives)
-	var year []string
+	var years []string
 	for _, v := range allArchives {
 		posts := models.ListPostByArchive(v.Year)
 		ArchiveResult[v.Year] = posts
-		year = append(year,v.Year)
+		years = append(years,v.Year)
 	}
-	fmt.Println(year)
 	c.HTML(http.StatusOK,"front/archives.html", gin.H{
 		"ArchiveResult":ArchiveResult,
-		"year":year,
+		"years":years,
 	})
 }
 
 func ArchivesByYear(c *gin.Context) {
+	var years []string
 	year := c.Param("year")
+	years = append(years,year)
 	var ArchiveResult = make(map[string][]*models.Post )
 	posts := models.ListPostByArchive(year)
 	ArchiveResult[year] = posts
 	c.HTML(http.StatusOK,"front/archives.html",gin.H{
 		"ArchiveResult":ArchiveResult,
+		"years":years,
 	})
 
 }

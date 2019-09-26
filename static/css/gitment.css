@@ -113,7 +113,8 @@ a.gitment-header-issue-link:hover {
   position: relative;
   min-height: 60px;
   padding-left: 60px;
-  margin: 19px 0;
+  margin: auto;
+  max-width: 800px;
 }
 
 .gitment-comment-avatar,

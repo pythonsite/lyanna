@@ -1038,6 +1038,8 @@ footer .href-item:hover {
   padding: 1%;
   border-radius: 3px;
   margin-top: 30px;
+  max-width: 800px;
+  margin: auto;
 }
 
 #related li {

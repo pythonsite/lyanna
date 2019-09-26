@@ -1,7 +1,6 @@
 package models
 
 import (
-	"fmt"
 	"log"
 )
 
@@ -66,7 +65,6 @@ func UpdateMultiTags(originTags []string, newTags []string, postID int) {
 	DB.Delete(&PostTag{},"tag_id in ( ? )",needToDelTagID)
 
 	needToAddTags := GetTagArray(newTags, originTags)
-	fmt.Println(needToAddTags)
 	var needAddTagID []int
 	for _,v := range needToAddTags {
 		tag := Tag{

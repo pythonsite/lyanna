@@ -1,7 +1,6 @@
 package controllers
 
 import (
-	"fmt"
 	"github.com/gin-contrib/sessions"
 	"github.com/gin-gonic/gin"
 	"github.com/microcosm-cc/bluemonday"
@@ -71,7 +70,6 @@ func Comments(c *gin.Context) {
 		pages,
 		len(comments),
 	}
-	fmt.Println(456)
 	commentsHTML,_:= utils.RenderAllComment(hh)
 	c.JSON(http.StatusOK,gin.H{
 		"r":0,

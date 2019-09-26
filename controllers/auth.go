@@ -51,7 +51,6 @@ func Oauth2Callback(c *gin.Context) {
 	session.Save()
 
 	token, err := GetTokenByCode(code)
-	fmt.Printf("token:%v",token)
 	if err != nil {
 		c.Redirect(http.StatusMovedPermanently, "/")
 		return

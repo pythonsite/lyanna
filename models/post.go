@@ -27,7 +27,6 @@ type Post struct {
 
 func (post *Post) Url() string{
 	url := fmt.Sprintf("/post/%d",post.ID)
-	fmt.Println(url)
 	return url
 }
 
@@ -169,7 +168,6 @@ func ListPostArchives()([]*Archive, error) {
 		archive.ArchiveDate, _ =  time.Parse("2006", archive.Year)
 		archives = append(archives, &archive)
 	}
-	fmt.Printf("%#v",archives)
 	return archives, nil
 }
 

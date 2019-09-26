@@ -86,7 +86,6 @@ func AboutMe(c *gin.Context) {
 		})
 		return
 	}
-	fmt.Println(post)
 	tags ,_ := models.ListTagByPostID(post.ID)
 	post.Tags = tags
 	content := post.Content

@@ -1,7 +1,7 @@
 runmode: debug
 general:
     addr: :9080
-    dsn: root:123456@(10.211.55.6:3306)/lyanna?charset=utf8&parseTime=True&loc=Local
+    dsn: root:123456@(192.168.188.106:3306)/lyanna?charset=utf8&parseTime=True&loc=Local
     sessionsecret: lyanna_blog
     logoutenabled: true
     perpage: 10

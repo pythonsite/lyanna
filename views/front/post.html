@@ -3,8 +3,16 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
+    <meta name="description" content="{{.Post.Excerpt}}">
+
+    <meta property="og:type" content="article">
+    <meta property="og:title" content="{{.Post.Title}}">
+    <meta property="og:url" content="/post/{{.Post.ID}}">
+    <meta property="og:site_name" content="syncd">
+    <meta property="og:description" content="{{.Post.Excerpt}}">
+    <meta property="og:published_time" content="{{dateFormat .Post.CreatedAt "2006-01-02 15:04:05" }}">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1.0, user-scalable=no">
-    <title>Fan's Blog</title>
+    <title>{{.Post.Title}}</title>
     <meta name="post_id" content="{{.Post.ID}}">
     {{template "front/head.html"}}
     <link rel="stylesheet" href="/static/css/main.css">

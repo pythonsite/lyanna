@@ -1,6 +1,7 @@
 package controllers
 
 import (
+	"fmt"
 	"github.com/gin-gonic/gin"
 	"github.com/microcosm-cc/bluemonday"
 	"github.com/russross/blackfriday"
@@ -10,7 +11,7 @@ import (
 	"net/http"
 	"strconv"
 )
-
+var Logger = models.Logger
 // blackfriday 配置
 const (
 	commonHtmlFlags = 0 |
@@ -34,9 +35,18 @@ const (
 )
 
 func PostIndex(c *gin.Context) {
-	posts, _ := models.ListPosts()
+	posts, err := models.ListPosts()
+	if err != nil {
+		msg := fmt.Sprintf("get all posts err:%v",err)
+		Logger.Fatal(msg)
+	}
 	for _, post := range posts {
-		tags, _:= models.ListTagByPostID(post.ID)
+		tags, err:= models.ListTagByPostID(post.ID)
+		if err != nil {
+			msg := fmt.Sprintf("list tag by postID err:%v",err)
+			Logger.Error(msg)
+			continue
+		}
 		post.Tags = tags
 	}
 	pagination := utils.Pagination{
@@ -62,7 +72,12 @@ func AdminPostPage(c *gin.Context) {
 	pageInt, _ := strconv.ParseInt(page,10,32)
 	posts, _ := models.ListPosts()
 	for _, post := range posts {
-		tags, _:= models.ListTagByPostID(post.ID)
+		tags, err:= models.ListTagByPostID(post.ID)
+		if err != nil {
+			msg := fmt.Sprintf("list tag by postID err:%v",err)
+			Logger.Error(msg)
+			continue
+		}
 		post.Tags = tags
 	}
 	pagination := utils.Pagination{
@@ -87,11 +102,31 @@ func AdminPostPage(c *gin.Context) {
 
 func GetEditPost(c *gin.Context) {
 	id := c.Param("id")
-	postID, _ := strconv.ParseUint(id,10,64)
-	post, _ := models.GetPostByID(postID)
-	tags ,_ := models.ListTagByPostID(post.ID)
-	allTags, _ := models.ListALlTags()
-	users, _:= models.ListUsers()
+	postID, err := strconv.ParseUint(id,10,64)
+	if err != nil {
+		msg := fmt.Sprintf("parse uint error:%v",err)
+		Logger.Fatal(msg)
+	}
+	post, err := models.GetPostByID(postID)
+	if err != nil {
+		msg := fmt.Sprintf("get post by ID error:%v",err)
+		Logger.Fatal(msg)
+	}
+	tags ,err := models.ListTagByPostID(post.ID)
+	if err != nil {
+		msg := fmt.Sprintf("list tag by postID error:%v",err)
+		Logger.Fatal(msg)
+	}
+	allTags, err := models.ListALlTags()
+	if err != nil {
+		msg := fmt.Sprintf("list all tags error:%v",err)
+		Logger.Fatal(msg)
+	}
+	users, err:= models.ListUsers()
+	if err != nil {
+		msg := fmt.Sprintf("list users error:%v",err)
+		Logger.Fatal(msg)
+	}
 	post.Tags = tags
 	var postTags []string
 	for _,v:=range post.Tags {
@@ -109,8 +144,16 @@ func GetEditPost(c *gin.Context) {
 }
 
 func GetNewPost(c *gin.Context) {
-	allTags, _ := models.ListALlTags()
-	users, _:= models.ListUsers()
+	allTags, err := models.ListALlTags()
+	if err != nil {
+		msg := fmt.Sprintf("list all tags error:%v",err)
+		Logger.Fatal(msg)
+	}
+	users, err:= models.ListUsers()
+	if err != nil {
+		msg := fmt.Sprintf("list users error:%v",err)
+		Logger.Fatal(msg)
+	}
 	c.HTML(http.StatusOK, "admin/post.html",gin.H{
 		"allTags":allTags,
 		"users":users,
@@ -122,7 +165,11 @@ func AddPost(c *gin.Context){
 	slug := c.PostForm("slug")
 	summary := c.PostForm("summary")
 	author := c.PostForm("author")
-	authorID,_ := strconv.ParseInt(author,10,64)
+	authorID,err := strconv.ParseInt(author,10,64)
+	if err != nil {
+		msg := fmt.Sprintf("ParseInt error:%v",err)
+		Logger.Fatal(msg)
+	}
 	tags := c.PostFormArray("tags")
 	content := c.PostForm("content")
 	canComment := "on" == c.PostForm("can_comment")
@@ -136,11 +183,24 @@ func AddPost(c *gin.Context){
 		CanComment:canComment,
 		Published:publish,
 	}
-	_ = models.PostCreatAndGetID(post)
+	err = models.PostCreatAndGetID(post)
+	if err != nil {
+		msg := fmt.Sprintf("PostCreatAndGetID error:%v",err)
+		Logger.Fatal(msg)
+	}
 	models.UpdateMultiTags([]string{}, tags, int(post.ID))
-	posts, _ := models.ListPosts()
+	posts, err := models.ListPosts()
+	if err != nil {
+		msg := fmt.Sprintf("list posts error:%v",err)
+		Logger.Fatal(msg)
+	}
 	for _, post := range posts {
-		tags, _:= models.ListTagByPostID(post.ID)
+		tags, err:= models.ListTagByPostID(post.ID)
+		if err != nil {
+			msg := fmt.Sprintf("list tag by postID error:%v",err)
+			Logger.Error(msg)
+			continue
+		}
 		post.Tags = tags
 	}
 	c.HTML(http.StatusOK,"admin/list_post.html",gin.H{
@@ -152,12 +212,20 @@ func AddPost(c *gin.Context){
 
 func UpdatePost(c *gin.Context) {
 	id := c.Param("id")
-	pID, _ := strconv.ParseInt(id,10,64)
+	pID, err := strconv.ParseInt(id,10,64)
+	if err != nil {
+		msg := fmt.Sprintf("parse int error:%v",err)
+		Logger.Fatal(msg)
+	}
 	title := c.PostForm("title")
 	slug := c.PostForm("slug")
 	summary := c.PostForm("summary")
 	author := c.PostForm("author")
-	authorID,_ := strconv.ParseInt(author,10,64)
+	authorID,err := strconv.ParseInt(author,10,64)
+	if err != nil {
+		msg := fmt.Sprintf("parse int error:%v",err)
+		Logger.Fatal(msg)
+	}
 	tags := c.PostFormArray("tags")
 	content := c.PostForm("content")
 	canComment := "on" == c.PostForm("can_comment")
@@ -173,12 +241,25 @@ func UpdatePost(c *gin.Context) {
 	}
 	post.ID = uint64(pID)
 	post.Update()
-	originPostTags,_ := models.ListTagByPostID(post.ID)
+	originPostTags,err := models.ListTagByPostID(post.ID)
+	if err != nil {
+		msg := fmt.Sprintf("list tag by postID error:%v",err)
+		Logger.Fatal(msg)
+	}
 	originPostTagNames := models.GetTagNames(originPostTags)
 	models.UpdateMultiTags(originPostTagNames, tags, int(post.ID))
-	posts, _ := models.ListPosts()
+	posts, err := models.ListPosts()
+	if err != nil {
+		msg := fmt.Sprintf("list posts error:%v",err)
+		Logger.Fatal(msg)
+	}
 	for _, post := range posts {
-		tags, _:= models.ListTagByPostID(post.ID)
+		tags, err:= models.ListTagByPostID(post.ID)
+		if err != nil {
+			msg := fmt.Sprintf("list tag by postID error:%v",err)
+			Logger.Error(msg)
+			continue
+		}
 		post.Tags = tags
 	}
 	c.HTML(http.StatusOK,"admin/list_post.html",gin.H{
@@ -197,12 +278,16 @@ func GetPost(c *gin.Context){
 }
 
 func getPost(c *gin.Context, isPublish bool) {
-	id := c.Param("id")
-	postID, _ := strconv.ParseUint(id,10,64)
 	var (
 		post *models.Post
 		err error
 	)
+	id := c.Param("id")
+	postID, err := strconv.ParseUint(id,10,64)
+	if err != nil {
+		msg := fmt.Sprintf("parse uint error:%v",err)
+		Logger.Fatal(msg)
+	}
 	if isPublish {
 		post,err = models.GetPostByIDAndPublished(postID,isPublish)
 	} else {
@@ -213,10 +298,18 @@ func getPost(c *gin.Context, isPublish bool) {
 		c.AbortWithError(http.StatusNotFound,err)
 		return
 	}
-	tags ,_ := models.ListTagByPostID(post.ID)
+	tags ,err := models.ListTagByPostID(post.ID)
+	if err != nil {
+		msg := fmt.Sprintf("list tag by postID error:%v",err)
+		Logger.Fatal(msg)
+	}
 	post.Tags = tags
 	content := post.Content
-	comments, _ := models.ListCommentsByPostID(int(postID))
+	comments, err := models.ListCommentsByPostID(int(postID))
+	if err != nil {
+		msg := fmt.Sprintf("list comments by postID error:%v",err)
+		Logger.Fatal(msg)
+	}
 	gitHubUser, _ := c.Get(models.CONTEXT_GIT_USER_KEY)
 	policy := bluemonday.UGCPolicy()
 	render := blackfriday.HtmlRenderer(commonHtmlFlags,"","")
@@ -255,7 +348,11 @@ func getPost(c *gin.Context, isPublish bool) {
 }
 
 func GetPosts(postID int64) []*models.Post {
-	tags, _ := models.ListTagByPostID(postID)
+	tags, err := models.ListTagByPostID(postID)
+	if err != nil {
+		msg := fmt.Sprintf("list tag by postID error:%v",err)
+		Logger.Fatal(msg)
+	}
 	var tagids []int64
 	for _,tag := range tags {
 		tagids = append(tagids,int64(tag.ID))

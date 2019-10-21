@@ -1,6 +1,7 @@
 package controllers
 
 import (
+	"fmt"
 	"github.com/gin-gonic/gin"
 	"lyanna/models"
 	"net/http"
@@ -8,7 +9,11 @@ import (
 )
 
 func Tags(c *gin.Context) {
-	tags, _ := models.ListTag()
+	tags, err := models.ListTag()
+	if err != nil {
+		msg := fmt.Sprintf("list tag err:%v",err)
+		Logger.Fatal(msg)
+	}
 	c.HTML(http.StatusOK,"front/tags.html",gin.H{
 		"tags":tags,
 	})
@@ -22,7 +27,11 @@ func Tag(c *gin.Context) {
 		err error
 	)
 	tagStr := c.Param("id")
-	tagID, _ := strconv.ParseInt(tagStr,10,64)
+	tagID, err := strconv.ParseInt(tagStr,10,64)
+	if err != nil {
+		msg := fmt.Sprintf("parse int err:%v",err)
+		Logger.Fatal(msg)
+	}
 	tagName := models.GetTagNameByID(int(tagID))
 	posts , err = models.ListPublishedPost(tagStr)
 	if err != nil {
@@ -36,7 +45,12 @@ func Tag(c *gin.Context) {
 	//}
 	//policy = bluemonday.StrictPolicy()
 	for _, post := range posts {
-		post.Tags,_ = models.ListTagByPostID(post.ID)
+		post.Tags,err = models.ListTagByPostID(post.ID)
+		if err != nil {
+			msg := fmt.Sprintf("list tag by postID err:%v",err)
+			Logger.Error(msg)
+			continue
+		}
 	}
 	c.HTML(http.StatusOK, "front/tag.html",gin.H{
 		"posts":posts,

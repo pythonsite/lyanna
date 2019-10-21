@@ -4,10 +4,12 @@ import (
 	"fmt"
 	"github.com/gin-gonic/gin"
 	"github.com/gorilla/feeds"
-	"log"
 	"lyanna/models"
 	"lyanna/utils"
 )
+
+
+//var Logger = models.Logger
 
 func GetRss(c *gin.Context) {
 	now := utils.GetCurrentTime()
@@ -21,8 +23,8 @@ func GetRss(c *gin.Context) {
 	feed.Items = make([]*feeds.Item, 0)
 	posts, err := models.ListPublishedPost("")
 	if err != nil {
-		log.Println(err)
-		return
+		msg := fmt.Sprintf("list published posts err:%v",err)
+		Logger.Fatal(msg)
 	}
 	for _, post := range posts {
 		item := &feeds.Item{
@@ -36,8 +38,8 @@ func GetRss(c *gin.Context) {
 	}
 	rss, err := feed.ToRss()
 	if err != nil {
-		log.Println(err)
-		return
+		msg := fmt.Sprintf("feed to rss err:%v",err)
+		Logger.Fatal(msg)
 	}
 	c.Writer.WriteString(rss)
 

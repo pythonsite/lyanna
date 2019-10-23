@@ -1,6 +1,7 @@
 package controllers
 
 import (
+	"fmt"
 	"github.com/gin-contrib/sessions"
 	"github.com/gin-gonic/gin"
 	"log"
@@ -44,7 +45,11 @@ func UserLogin(c *gin.Context) {
 }
 
 func UserList(c *gin.Context) {
-	users, _ := models.ListUsers()
+	users, err := models.ListUsers()
+	if err != nil {
+		msg := fmt.Sprintf("list users err:%v",err)
+		Logger.Fatal(msg)
+	}
 	user, _ := c.Get(models.CONTEXT_USER_KEY)
 	pagination := utils.Pagination{
 		CurrentPage:1,
@@ -67,8 +72,16 @@ func UserList(c *gin.Context) {
 
 func AdminUserPage(c *gin.Context) {
 	page := c.Param("page")
-	pageInt, _ := strconv.ParseInt(page,10,32)
-	users, _ := models.ListUsers()
+	pageInt, err := strconv.ParseInt(page,10,32)
+	if err != nil {
+		msg := fmt.Sprintf("parse int err:%v",err)
+		Logger.Fatal(msg)
+	}
+	users, err := models.ListUsers()
+	if err != nil {
+		msg := fmt.Sprintf("list users err:%v",err)
+		Logger.Fatal(msg)
+	}
 	user, _ := c.Get(models.CONTEXT_USER_KEY)
 	pagination := utils.Pagination{
 		CurrentPage:int(pageInt),

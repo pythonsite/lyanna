@@ -14,7 +14,7 @@ github:
     redirecturl: http://127.0.0.1:9080/oauth2
     tokenurl: https://github.com/login/oauth/access_token
 log:
-    logpath: ./logs/callin.log
+    logpath: ./logs/lyanna.log
     maxsize: 20
     maxage: 7
     compress: true
